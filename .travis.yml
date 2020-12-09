@@ -1,0 +1,8 @@
+language: python
+python:
+  - "3.6.8"
+#command to install dependencies
+install:
+  - pip install face-recognition
+script:
+  - pytest
