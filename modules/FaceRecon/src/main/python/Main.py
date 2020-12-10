@@ -27,7 +27,6 @@ for i in range(len(known_ppl_img_files)):
 video_capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 face_locations = []
 face_encodings = []
-face_names = []
 face_recon = FaceRecon()
 process_this_frame = True
 count = 0
