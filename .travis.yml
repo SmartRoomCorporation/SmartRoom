@@ -2,10 +2,12 @@ language: python
 python:
   - "3.6.8"
 #command to install dependencies
+cache: pip
 install:
   - pip install face-recognition
   - pip install opencv-python
   - pip install coverage
+  -
 script:
   - pytest
 after_success:
