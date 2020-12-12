@@ -47,12 +47,12 @@ class TestFaceRecon(unittest.TestCase):
 
     def testEncodeUnkown(self):
         for i in range(len(test_negative_img_files)):
-            self.assertGreater(fr.encodeUnknown(test_negative_img_files[i]), 0)
+            self.assertGreater(len(fr.encodeUnknown(test_negative_img_files[i])), 0)
 
     def testNegativeAddEncode(self):
         for i in range(len(test_negative_ppl_encoding)):
             self.assertEqual(-1, fr.faceRecon(test_negative_ppl_encoding[i], known_ppl_encoding))
-            self.assertGreater(fr.encodeUnknown(test_negative_img_files[i]), 0)
+            self.assertGreater(len(fr.encodeUnknown(test_negative_img_files[i])), 0)
             
 if __name__ == '__main__':
     unittest.main()
