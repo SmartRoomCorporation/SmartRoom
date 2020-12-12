@@ -31,12 +31,6 @@
 *.out
 *.app
 
-# Images
-*.jpeg
-*.jpg
-*.png
-*.gif
-*.tiff
 
 # PyCache
 *.pyc
