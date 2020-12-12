@@ -4,11 +4,9 @@ python:
 #command to install dependencies
 install:
   - pip install face-recognition
-  - pip install unittest
-  - pip install xmlrunner
   - pip install cv2
-  - pip install codecov
+  - pip install coverage
 script:
   - pytest
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - coverage test_FaceRecon.py
