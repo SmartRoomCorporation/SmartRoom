@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(os.path.dirname(current_dir))
-sys.path.insert(0, parent_dir)
+sys.path.insert(0, parent_dir) 
 from main.python.FaceRecon import FaceRecon
 
 known_ppl_img_files = glob.glob(parent_dir+"/main/res/known_people/*.*")
@@ -33,14 +33,9 @@ for i in range(len(test_positive_img_files)): # positives
     face_locations = face_recognition.face_locations(img)
     face_encodings = face_recognition.face_encodings(img, face_locations)
     test_positive_ppl_encoding.append(face_encodings)
-
+    
 
 class TestFaceRecon(unittest.TestCase):
-
-    def testSetup(self):
-        self.assertEqual(2, len(test_positive_ppl_encoding))
-        self.assertEqual(1, len(test_negative_ppl_encoding))
-        self.assertEqual(3, len(known_ppl_encoding))
 
     def testPositive(self):
         for i in range(len(test_positive_ppl_encoding)):
@@ -50,5 +45,14 @@ class TestFaceRecon(unittest.TestCase):
         for i in range(len(test_negative_ppl_encoding)):
             self.assertEqual(-1, fr.faceRecon(test_negative_ppl_encoding[i], known_ppl_encoding))
 
+    def testEncodeUnkown(self):
+        for i in range(len(test_negative_img_files)):
+            self.assertGreater(fr.encodeUnknown(test_negative_img_files[i]), 0)
+
+    def testNegativeAddEncode(self):
+        for i in range(len(test_negative_ppl_encoding)):
+            self.assertEqual(-1, fr.faceRecon(test_negative_ppl_encoding[i], known_ppl_encoding))
+            self.assertGreater(fr.encodeUnknown(test_negative_img_files[i]), 0)
+            
 if __name__ == '__main__':
     unittest.main()
