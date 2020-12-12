@@ -10,3 +10,4 @@ script:
   - pytest
 after_success:
   - coverage run test_FaceRecon.py
+  - coverage report --fail-under=80
