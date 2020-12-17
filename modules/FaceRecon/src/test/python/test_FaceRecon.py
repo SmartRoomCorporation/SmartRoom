@@ -64,7 +64,6 @@ class TestFaceRecon(unittest.TestCase):
 
     def testEncodeNoFace(self):
         for i in range(len(test_noface_img_files)):
-            print(i)
             self.assertEqual(len(fr.encodeUnknown(test_noface_img_files[i])), 0)
 
     def testNoFaceRecon(self):

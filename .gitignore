@@ -37,3 +37,9 @@
 
 # DS_Store
 .DS_Store
+
+# Coverage
+.coverage
+
+# PytestCache
+.pytest_cache
