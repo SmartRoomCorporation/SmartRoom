@@ -7,7 +7,7 @@ def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
     client.subscribe("subres")
     client.subscribe(topic)
-    client.publish("subreq", "topicreq", qos=0, retain=True)
+    client.publish("subreq", topic, qos=0, retain=False)
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.

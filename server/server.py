@@ -13,7 +13,8 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
     if(msg.topic == "subreq"):
-        if(smartrooms.append(str(msg.payload))): client.publish("subres", "subscribed", qos=0, retain=True)
+        smartrooms.append(str(msg.payload)) 
+        client.publish(str(msg.payload), "Subscribed on "+str(msg.payload), qos=0, retain=False)
     
 client = mqtt.Client()
 client.on_connect = on_connect
