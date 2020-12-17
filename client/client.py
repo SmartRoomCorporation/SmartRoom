@@ -1,11 +1,13 @@
 import paho.mqtt.client as mqtt
-topic = ""
+from uuid import getnode as get_mac
+topic = ':'.join(("%012X" % get_mac())[i:i+2] for i in range(0, 12, 2))
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
-    client.subscribe("topicres")
-    client.publish("topicreq", "topicreq", qos=0, retain=False)
+    client.subscribe("subres")
+    client.subscribe(topic)
+    client.publish("subreq", "topicreq", qos=0, retain=True)
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
@@ -13,10 +15,8 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
-    if(msg.topic == "topicres"):
-        client.unsubscribe("topicres")
-        topic = msg.payload
-        client.subscribe(topic)
+    if(msg.topic == "subres"):
+        client.unsubscribe("subres")
     if(msg.topic == topic):
         print(msg.payload)  
     
