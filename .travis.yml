@@ -7,7 +7,7 @@ install:
   - pip install face-recognition
   - pip install opencv-python
   - pip install coverage
-  -
+  - pip install paho-mqtt
 script:
   - pytest
 after_success:
