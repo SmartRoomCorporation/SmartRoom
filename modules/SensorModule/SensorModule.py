@@ -17,3 +17,4 @@ class SensorModule:
 
     def startSensorControl():
         #implements sensor control
+
