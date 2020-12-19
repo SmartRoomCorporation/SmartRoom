@@ -11,7 +11,7 @@ class TempModule(SensorModule):
 			temp = dht.temperature
 			super().setCurrValue(temp)
 			return temp
-		except RuntimeException as Error
+		except RuntimeException as Error:
 			return super().getCurrValue()
-		except Exceprion as Error
+		except Exception as Error:
 			return super().getCurrValue()

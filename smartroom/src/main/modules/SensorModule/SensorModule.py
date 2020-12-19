@@ -1,11 +1,11 @@
 class SensorModule:
 	curr_value = 0
 
-	def setCurrValue(curr_value):
+	def setCurrValue(self, curr_value):
 		self.curr_value = curr_value
 
-	def getCurrValue():
+	def getCurrValue(self):
 		return self.curr_value
 
-	def startMeasure():
+	def startMeasure(self):
 		return 0
