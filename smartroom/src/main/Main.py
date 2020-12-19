@@ -1,7 +1,7 @@
 from SmartRoom import SmartRoom
-from modules.SensorModule.TempModule.TempModule import TempModule
+from modules.SensorModule.TempModule.TempModuleStub import TempModuleStub
 
 sr = SmartRoom()
-tm = TempModule()
+tm = TempModuleStub()
 sr.addSensor("temp1", tm)
 sr.initClient("87.16.33.82")

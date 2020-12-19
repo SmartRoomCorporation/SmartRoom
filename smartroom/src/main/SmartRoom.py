@@ -2,6 +2,7 @@ import paho.mqtt.client as mqtt
 from uuid import getnode as get_mac
 import json
 topic = ':'.join(("%012X" % get_mac())[i:i+2] for i in range(0, 12, 2))
+serverTopic = ':'.join(("%012X" % get_mac())[i:i+2] for i in range(0, 12, 2))+'-server' # output from client
 GETSTATUS = "GETSTATUS"
 
 class SmartRoom:
@@ -37,6 +38,7 @@ class SmartRoom:
 
     def on_message(self, client, userdata, msg): # on message callback
         if(msg.topic == topic):
-            print(str(msg.payload.decode("utf-8")))  
+            #print(str(msg.payload.decode("utf-8")))  
             if(str(msg.payload.decode("utf-8")) == GETSTATUS):
-                client.publish(json.dump(self.getRoomStatus()), topic, qos=0, retain=False)
+                #print(json.dumps(self.getRoomStatus()))
+                client.publish(serverTopic, json.dumps(self.getRoomStatus()), qos=0, retain=False)
