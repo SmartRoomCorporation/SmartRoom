@@ -5,8 +5,8 @@ class SmartRoomClient:
     def setMacAddress(self, macaddr):
         self.macaddress = macaddr
 
-    def updateSensors(self, sensor, value=0):
-        self.sensors[sensor] = value
+    def updateSensors(self, sensors):
+        self.sensors = sensors
 
     def getSensorValue(self, sensor):
         if(sensor in self.sensors): return self.sensors.get(sensor)

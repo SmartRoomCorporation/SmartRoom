@@ -20,6 +20,7 @@ def add_mqtt_client(topic):
     smartrooms.append(sr)
     client.publish(clientTopic, "Subscribed on " + clientTopic, qos=0, retain=False)
     client.subscribe(clientTopic)
+    client.publish(clientTopic, "GETSTATUS", qos=0, retain=False)
 
 
 client = mqtt.Client()
