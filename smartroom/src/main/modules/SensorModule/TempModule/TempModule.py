@@ -4,11 +4,14 @@ import adafruit_dht as ad
 
 class TempModule(SensorModule):
     #This module implements the temperature control function
-	data_pin = 0
-	def _init_(self, ref_value, data_pin)
-		super()._init_(self, ref_value)
-		self.data_pin = 
+	dht = adafruit_dht(board.D4)
 
 	def startMeasure(self):
 		try:
-			temp = 
+			temp = dht.temperature
+			super().setCurrValue(temp)
+			return temp
+		except RuntimeException as Error
+			return super().getCurrValue()
+		except Exceprion as Error
+			return super().getCurrValue()
