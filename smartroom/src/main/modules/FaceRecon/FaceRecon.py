@@ -13,9 +13,11 @@ class FaceRecon:
         for face_encoding in face_encodings: # See if the face is a match for the known face(s)
             matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
             face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
-            best_match_index = np.argmin(face_distances)
-            if matches[best_match_index]: # if face is a match return the index in array passed else -1
-                return best_match_index
+            if face_distances.size:
+                best_match_index = np.argmin(face_distances)
+                if matches[best_match_index]: # if face is a match return the index in array passed else -1
+                    return best_match_index
+            else: return -1
         else:
             return -1
 

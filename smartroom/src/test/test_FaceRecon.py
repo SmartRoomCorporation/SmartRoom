@@ -5,9 +5,9 @@ import face_recognition
 import cv2
 import numpy as np
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(os.path.dirname(current_dir))
+parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
-from main.python.FaceRecon import FaceRecon
+from main.modules.FaceRecon.FaceRecon import FaceRecon
 
 known_ppl_img_files = glob.glob(parent_dir+"/main/res/known_people/*.*")
 test_negative_img_files = glob.glob(parent_dir+"/test/res/test_negative_images/*.*")

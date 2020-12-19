@@ -4,12 +4,12 @@ import cv2
 import numpy as np
 from pprint import pprint
 import glob
-import os
-from pathlib import Path
+import os,sys,inspect
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
 
 
-
-dirname = Path(os.path.dirname(__file__)).parent
+dirname = os.path.dirname(parent_dir)
 known_ppl_img_files = glob.glob(str(dirname)+"/res/known_people/*.*")
 
 known_ppl_encoding = []
