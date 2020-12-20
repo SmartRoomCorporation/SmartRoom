@@ -23,7 +23,7 @@ class SmartRoom:
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
         self.client.connect(ip, 1883, 60)
-        self.client.loop_forever() 
+        self.client.loop_start()
 
     def getRoomStatus(self):
         currStatus = dict()
@@ -32,7 +32,7 @@ class SmartRoom:
         return currStatus
 
     def on_connect(self, client, userdata, flags, rc): # on connect callback
-        print("Connected with result code "+str(rc))
+        #print("Connected with result code "+str(rc))
         client.subscribe(str(topic))
         client.publish("subreqq", topic, qos=0, retain=False)
 
@@ -42,3 +42,7 @@ class SmartRoom:
             if(str(msg.payload.decode("utf-8")) == GETSTATUS):
                 #print(json.dumps(self.getRoomStatus()))
                 client.publish(serverTopic, json.dumps(self.getRoomStatus()), qos=0, retain=False)
+
+    def stopClient(self):
+        self.client.loop_stop()
+        self.client.disconnect()
