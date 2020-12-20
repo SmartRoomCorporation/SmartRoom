@@ -16,6 +16,9 @@ def on_message(client, userdata, msg): # on message callback
     if(str(msg.topic) == "subreqq"):
         add_mqtt_client(str(msg.payload.decode("utf-8")))
     if(sanitizeTopic(str(msg.topic)) in smartrooms): 
+        if(str(msg.payload.decode("utf-8")) == "ciao"): 
+            client.publish(sanitizeTopic(str(msg.topic)), "ciaone", qos=0, retain=False)
+            return True
         smartrooms[sanitizeTopic(str(msg.topic))].updateSensors(json.loads(str(msg.payload.decode("utf-8"))))
         #print(json.loads(str(msg.payload.decode("utf-8"))))
         printSensors(sanitizeTopic(str(msg.topic)))
