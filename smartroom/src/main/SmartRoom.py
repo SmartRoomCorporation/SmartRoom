@@ -33,7 +33,7 @@ class SmartRoom(Thread):
     def getRoomStatus(self):
         currStatus = dict()
         for key, value in self.sensors.items():
-            currStatus[key] = value.getCurrValue()
+            currStatus[key] = value.startMeasure()
         return currStatus
 
     def on_connect(self, client, userdata, flags, rc): # on connect callback
@@ -51,7 +51,7 @@ class SmartRoom(Thread):
                 print("ciaone")
 
     def pubToServ(self):
-        self.client.publish(serverTopic, "ciao", qos=0, retain=False)
+        return self.getRoomStatus()
 
     def run(self):
         self.initClient()

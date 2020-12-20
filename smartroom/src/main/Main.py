@@ -1,23 +1,16 @@
 from SmartRoom import SmartRoom
+from Gui import Gui
 from modules.SensorModule.TempModule.TempModuleStub import TempModuleStub
 import time
-import tkinter as tk
 
 sr = SmartRoom()
+gui = Gui()
 tm = TempModuleStub()
 sr.addSensor("temp1", tm)
 sr.setIp("87.16.33.82")
 sr.start()
-window = tk.Tk()
-window.geometry("600x600")
-window.title("SmartRoom")
+gui.setRoom(sr)
+gui.run()
 
 
-def callSr():
-    sr.pubToServ()
-
-first_button = tk.Button(text="Click 1", command=callSr)
-first_button.grid(row=0, column=0,sticky="W")
-
-window.mainloop()
     
