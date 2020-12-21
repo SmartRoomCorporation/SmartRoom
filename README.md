@@ -4,3 +4,6 @@
 Implementation of a room control system in a building
 # Changes
 - Implemented face recognition
+- MQTT protocol for communication
+- Implemented Client + Server
+- Implemented sensor module

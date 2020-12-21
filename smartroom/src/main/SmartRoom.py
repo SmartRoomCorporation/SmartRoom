@@ -10,6 +10,13 @@ class SmartRoom(Thread):
     sensors = dict()
     client = mqtt.Client()
     ip = ""
+    camera = ""
+
+    def setCamera(self, camera):
+        self.camera = camera
+
+    def getCamera(self):
+        return self.camera
 
     def addSensor(self, sensor, sensorobj):
         self.sensors[sensor] = sensorobj

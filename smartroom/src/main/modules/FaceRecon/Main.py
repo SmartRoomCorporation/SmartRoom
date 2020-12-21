@@ -31,8 +31,10 @@ face_recon = FaceRecon()
 process_this_frame = True
 count = 0
 access = False
+countProc = 0
 
 while True:
+    
     ret, frame = video_capture.read()
 
     small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
@@ -57,7 +59,14 @@ while True:
                     unknown_ppl_encoding.append(unkown_images_encoding)
                     count = count + 1
 
-    process_this_frame = not process_this_frame
+    if(process_this_frame == True):
+        process_this_frame = not process_this_frame
+    else:
+        if(countProc > 3): 
+            print("processing")
+            process_this_frame = not process_this_frame
+            countProc = 0
+        countProc += 1
     
     for (top, right, bottom, left) in face_locations:
         top *= 4
