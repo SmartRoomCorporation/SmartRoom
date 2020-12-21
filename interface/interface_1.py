@@ -1,19 +1,15 @@
 import tkinter as tk
 from tkinter import Listbox
-from PIL import Image
-from PIL import ImageTk
-from pprint import pprint
-up=Image.open("up.png")
-
-#up=up.resize((20,20))
-pprint(up)
-up_icon=ImageTk.PhotoImage(up)
-
-
+from PIL import Image, ImageTk
 
 # creaiamo una finestra dove poi andremo a inserire altri elementi
 
 window = tk.Tk()
+
+
+up=Image.open("up.png")
+up=up.resize((20,20))
+up_icon=ImageTk.PhotoImage(up)
 
 #andiamo a personalizzarla dandole un'altezza e larghezza
 
