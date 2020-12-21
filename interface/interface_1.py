@@ -1,5 +1,13 @@
 import tkinter as tk
 from tkinter import Listbox
+from PIL import Image
+from PIL import ImageTk
+from pprint import pprint
+up=Image.open("up.png")
+
+#up=up.resize((20,20))
+pprint(up)
+up_icon=ImageTk.PhotoImage(up)
 
 
 
@@ -86,4 +94,3 @@ text_output.grid(row=13, column=0,pady="5",sticky="W")
 
 if __name__== "__main__":
     window.mainloop()
-
