@@ -2,12 +2,12 @@ import cv2
 import numpy as np
 import PIL.Image, PIL.ImageTk
 from PIL import Image, ImageTk
-from FaceRecon import FaceRecon
+#from FaceRecon import FaceRecon
 
 class Camera:
 
     video_capture = ""
-    fr = FaceRecon()
+    #fr = FaceRecon()
 
     def initCamera(self):
         self.video_capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)

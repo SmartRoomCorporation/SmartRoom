@@ -29,6 +29,7 @@ class Gui:
     
     def refreshCamera(self):
         self.showCamera()
+        self.sr.getCamera().showFaceRecon()
         self.window.after(int(1000/30), self.refreshCamera)
 
     def showCamera(self):
@@ -39,7 +40,7 @@ class Gui:
 
     def ciaone(self):
         self.count = self.count + 1
-        self.text_output = tk.Label(self.window, text="Strunz" + str(self.count), fg="green", font=("Helevetica", 16))
+        self.text_output = tk.Label(self.window, text="Stub" + str(self.count), fg="green", font=("Helevetica", 16))
         self.text_output.grid(row=3, column=1, padx=50, sticky="W")
 
     def setRoom(self, sr):
