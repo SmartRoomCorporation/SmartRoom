@@ -24,7 +24,8 @@ for i in range(len(known_ppl_img_files)):
 
 
 # Initialize some variables
-video_capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cv2.namedWindow('Video')
+video_capture = cv2.VideoCapture(0)
 face_locations = []
 face_encodings = []
 face_recon = FaceRecon()
@@ -32,11 +33,12 @@ process_this_frame = True
 count = 0
 access = False
 countProc = 0
-
+frame=None
 while True:
-    
-    ret, frame = video_capture.read()
-
+    rval, frame = video_capture.read()
+    while(frame is None):
+        rval, frame = video_capture.read()
+    frame1=frame
     small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
 
     rgb_small_frame = small_frame[:, :, ::-1]
@@ -87,7 +89,8 @@ while True:
             font = cv2.FONT_HERSHEY_DUPLEX
             cv2.putText(frame, "Access Deined", (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
 
-    cv2.imshow('Video', frame)
+    cv2.imshow('Video', frame1)
+
     # Hit 'q' on the keyboard to quit!
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
