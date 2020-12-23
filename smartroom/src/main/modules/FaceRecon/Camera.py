@@ -12,15 +12,19 @@ class Camera:
     video_capture = ""
     waitingCameraFrame = ""
     waitingCameraFrameSingle = ""
+    cameraBusy = True
     #fr = FaceRecon()
 
     def initCamera(self):
-        self.video_capture = cv2.VideoCapture(0)
+        self.video_capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
         self.waitingCameraFrame = self.waitingCameraFrameInit()
         self.waitingCameraFrameSingle = self.waitingCameraFrameSingleInit()
 
     def checkCamera(self):
-        return self.video_capture.isOpened()
+        return not self.video_capture is None and self.video_capture.isOpened()
+
+    def checkCameraIsBusy(self):
+        return not self.video_capture.grab()
 
     def getResDir(self):
         current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -32,6 +36,7 @@ class Camera:
         self.video_capture.release()
 
     def getCameraCurrentFrame(self):
+        if(not self.checkCamera() or self.checkCameraIsBusy()): return None
         ret, frame = self.video_capture.read()
         return frame
 
