@@ -43,3 +43,6 @@
 
 # PytestCache
 .pytest_cache
+
+# pycache
+__pycache__
