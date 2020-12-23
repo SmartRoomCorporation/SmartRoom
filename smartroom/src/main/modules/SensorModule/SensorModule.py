@@ -9,3 +9,6 @@ class SensorModule:
 
 	def startMeasure(self):
 		return 0
+
+	def createGUIBlock(self):
+		return 0

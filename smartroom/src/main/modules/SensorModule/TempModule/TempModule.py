@@ -20,18 +20,13 @@ class TempModule(SensorModule):
 		except Exception as Error:
 			return super().getCurrValue()
 
-
-
-
-class GuiSensorTemp():
-	
-	def CreateTempGui(self, block):
-		up=Image.open("up.png")
-   	 	up=up.resize((20,20))
-    	up_icon=ImageTk.PhotoImage(up)
-    	up1=Image.open("down.png")
-    	up1=up1.resize((20,20))
-    	up_icon1=ImageTk.PhotoImage(up1)
+	def createTempGui(self, block):
+		upimg = Image.open("up.png")
+		upimg = upimg.resize((20,20))
+		up_icon = ImageTk.PhotoImage(upimg)
+		up1=Image.open("down.png")
+		up1=up1.resize((20,20))
+		up_icon1=ImageTk.PhotoImage(up1)
 		text = "Sensore 1:"
 		text_output = tk.Label(block, text=text, fg="Green", font=("Helevetica",16))
 		text_output.grid(row=2, column=0,sticky="W")
