@@ -45,3 +45,6 @@ class Gui:
 
     def setRoom(self, sr):
         self.sr = sr
+    
+    def getWindow(self):
+        return self.window

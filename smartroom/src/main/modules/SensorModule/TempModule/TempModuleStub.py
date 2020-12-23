@@ -7,9 +7,10 @@ class TempModuleStub(SensorModule.SensorModule):
 	count = 0
 	guiBlock = ""
 
-	def __init__(self):
-    		self.guiBlock = super().createGUIBlock()
-    		createTempGui(self.guiBlock)
+	def __init__(self, block):
+    		self.guiBlock = super().createGUIBlock(block)
+    		self.createTempGui(self.guiBlock)
+			
 
 	def startMeasure(self):
 		if (self.count == 0):
