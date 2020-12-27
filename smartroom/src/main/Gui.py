@@ -8,6 +8,8 @@ class Gui:
     sr = ""
     text_output = ""
     count = 0
+    camPreview = tk.Label(window, image = None, width=440, height=300)
+    camPreview.grid(row=2)
 
     def run(self):
         self.initGui()
@@ -16,8 +18,12 @@ class Gui:
         self.window.mainloop()
 
     def initGui(self):
-        s_button = tk.Button(text="Click 2", command=self.ciaone)
-        s_button.grid(row=4, column=0,sticky="W")                    
+        s_button = tk.Button(text="OPEN CAMERA", command=self.ciaone1)
+        s_button.grid(row=4, column=0,sticky="W")
+        s_button = tk.Button(text="CLOSE CAMERA", command=self.ciaone2)
+        s_button.grid(row=5, column=0,sticky="W")     
+        s_button = tk.Button(text="SET FULLSCREEN", command=self.ciaone)
+        s_button.grid(row=6, column=0,sticky="W")                 
 
     def callSr(self):
         self.text_output = tk.Label(self.window, text=json.dumps(self.sr.getRoomStatus()), fg="green", font=("Helevetica", 16))
@@ -34,14 +40,17 @@ class Gui:
 
     def showCamera(self):
         photo = self.sr.getCamera().getCameraSimpleStream()
-        self.label = tk.Label(self.window, image = photo, width=440, height=300)
-        self.label.image = photo
-        self.label.grid(row=2)
+        self.camPreview.config(image = photo)
+        self.camPreview.image = photo
 
     def ciaone(self):
-        self.count = self.count + 1
-        self.text_output = tk.Label(self.window, text="Stub" + str(self.count), fg="green", font=("Helevetica", 16))
-        self.text_output.grid(row=3, column=1, padx=50, sticky="W")
+        self.sr.getCamera().setFullScreen()
+
+    def ciaone1(self):
+        self.sr.getCamera().openCamera()
+
+    def ciaone2(self):
+        self.sr.getCamera().closeCamera()
 
     def setRoom(self, sr):
         self.sr = sr

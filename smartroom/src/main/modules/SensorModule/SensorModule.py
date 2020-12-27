@@ -1,9 +1,16 @@
 import tkinter as tk 
+import os,sys,inspect
 
 class SensorModule:
 	curr_value = 0
 	left_side = ""
 	right_side = ""
+
+	def getResDir(self): 
+		current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))) 
+		parent_dir = os.path.dirname(current_dir) 
+		dirname = os.path.dirname(parent_dir) 
+		return str(dirname)
 
 	def setCurrValue(self, curr_value):
 		self.curr_value = curr_value

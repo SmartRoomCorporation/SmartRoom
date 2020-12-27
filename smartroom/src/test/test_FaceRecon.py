@@ -70,5 +70,18 @@ class TestFaceRecon(unittest.TestCase):
         for i in range(len(test_noface_ppl_encoding)):
             self.assertEqual(-1, fr.faceRecon(test_noface_ppl_encoding[i], known_ppl_encoding))
 
+    def testNotProcessFrame(self):
+        self.assertIs(fr.processFrame(None, False), None)
+    
+    def testProcessFramePositive(self):
+        for i in range(len(test_positive_img_files)):
+            access, frame = fr.processFrame(cv2.imread(test_positive_img_files[i]), True)
+            self.assertEqual(True, access)
+
+    def testProcessFrameNegative(self):
+        for i in range(len(test_negative_img_files)):
+            access, frame = fr.processFrame(cv2.imread(test_negative_img_files[i]), True)
+            self.assertEqual(False, access)
+
 if __name__ == '__main__':
     unittest.main()

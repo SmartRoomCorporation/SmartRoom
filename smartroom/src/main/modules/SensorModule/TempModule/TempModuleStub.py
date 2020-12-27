@@ -41,10 +41,10 @@ class TempModuleStub(SensorModule.SensorModule):
         return self.guiBlock
 
     def createTempGui(self, left, right):
-        up = Image.open("up.png")
+        up = Image.open(self.getResDir() + "/res/assets/general/up.png")
         up = up.resize((20, 20))
         self.up_icon = ImageTk.PhotoImage(up)
-        up1 = Image.open("down.png")
+        up1 = Image.open(self.getResDir() + "/res/assets/general/down.png")
         up1 = up1.resize((20, 20))
         self.up_icon1 = ImageTk.PhotoImage(up1)
         text = "Sensore 1:"

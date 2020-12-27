@@ -2,6 +2,9 @@ import paho.mqtt.client as mqtt
 from pprint import pprint
 from SmartRoomClient import SmartRoomClient
 import json
+import logging
+
+log = logging.getLogger("MQTT_LOG_DEBUG")
 
 # clientTopic input from client
 # serverTopic output from server
@@ -11,6 +14,9 @@ smartrooms = dict() # list of clients connected
 def on_connect(client, userdata, flags, rc): # on connect callback
     print("Server Started")
     client.subscribe("subreqq")
+
+def on_log(client, userdata, level, buf):
+        print(buf)
 
 def on_message(client, userdata, msg): # on message callback
     if(str(msg.topic) == "subreqq"):
@@ -46,6 +52,8 @@ def printSensors(smartroom):
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
+client.enable_logger(logger=log)
+client.on_log = on_log
 
 client.connect("87.7.152.200", 1883, 60)
 
