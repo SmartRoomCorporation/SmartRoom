@@ -10,7 +10,7 @@ from main.modules.SensorModule.AirModule.AirModuleStub import AirModuleStub
 class TestAirModule(unittest.TestCase):
 
     def testCurrentValue(self):
-        tms = AirModuleStub(None)
+        tms = AirModuleStub()
         tms.setThresholdValue(120)
         # lowerboundtest 
         tms.setCurrValue(-1)

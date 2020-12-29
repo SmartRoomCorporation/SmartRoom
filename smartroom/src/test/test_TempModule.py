@@ -10,7 +10,7 @@ from main.modules.SensorModule.TempModule.TempModuleStub import TempModuleStub
 class TestTempModule(unittest.TestCase):
 
     def testCurrentValue(self):
-        tms = TempModuleStub(None)
+        tms = TempModuleStub()
         tms.setThresholdValue(25)
         # lowerboundtest 
         tms.setCurrValue(-51)

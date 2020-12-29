@@ -7,18 +7,22 @@ class LightModuleStub(SensorModule.SensorModule):
 	DIMMEROFF = 0
 	DIMMERMIDDLE = 50
 	DIMMERFULL = 100
+	LOWERBOUND = -1
+	UPPERBOUND = 10001
 
-	def __init__(self, block): 
-		super().createGUIBlock(block) 
-		self.leftGuiSide = self.left_side 
-		self.rightGuiSide = self.right_side 
-		self.createTempGui(self.leftGuiSide, self.rightGuiSide) 
+	def __init__(self): 
 		self.setActuatorStatus(0)
+
+	def initGui(self, block): 
+		super().createGUIBlock(block)
 
 	def manualCommand(self, val): 
 		self.setActuatorStatus(val)
 
 	def actuator(self): 
+		if(self.getCurrValue() <= self.LOWERBOUND or self.getCurrValue() >= self.UPPERBOUND): 
+			self.setActuatorStatus(None)   
+			return False
 		if(self.getReqNumber() < self.MAXREQNUMBER): self.setReqNumber(self.getReqNumber() + 1) 
 		else: 
 			curr = self.getCurrValue()
@@ -35,11 +39,8 @@ class LightModuleStub(SensorModule.SensorModule):
 
 		if self.count > 0 and self.count < 20:
 			if (self.count % 3) == 0:
-				if self.getCurrValue() > 1000:
-					self.setCurrValue(self.getCurrValue() - 150)
-                else:
-                    self.setCurrValue(self.getCurrValue() + 80)
-
+				if self.getCurrValue() > 1000: self.setCurrValue(self.getCurrValue() - 150) 
+				else: self.setCurrValue(self.getCurrValue() + 80)
 		if self.count > 30 and self.count < 60:
 			if (self.count % 3) == 0:
 				if self.getCurrValue() < 2500:

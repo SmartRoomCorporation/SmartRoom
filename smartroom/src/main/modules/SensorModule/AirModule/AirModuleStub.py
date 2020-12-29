@@ -10,10 +10,11 @@ class AirModuleStub(SensorModule.SensorModule):
 	LOWERBOUND = -1
 	UPPERBOUND = 201
 
-	def __init__(self, block): 
-		super().createGUIBlock(block) 
-		#self.createTempGui(self.leftGuiSide, self.rightGuiSide) 
+	def __init__(self): 
 		self.setActuatorStatus(0)
+
+	def initGui(self, block): 
+		super().createGUIBlock(block) 
 
 	def manualCommand(self, val): 
 		self.setActuatorStatus(val)

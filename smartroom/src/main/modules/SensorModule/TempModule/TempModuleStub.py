@@ -11,12 +11,14 @@ class TempModuleStub(SensorModule.SensorModule):
     UPPERBOUND = 80
     LOWERBOUND = -50
 
-    def __init__(self, block):
+    def __init__(self):
+        self.setActuatorStatus(False)
+
+    def initGui(self, block):
         super().createGUIBlock(block)
         self.leftGuiSide = self.left_side
         self.rightGuiSide = self.right_side
         self.createTempGui(self.leftGuiSide, self.rightGuiSide)
-        self.setActuatorStatus(False)
 
     def manualCommand(self, val):
         self.setAutoPilot(val)
