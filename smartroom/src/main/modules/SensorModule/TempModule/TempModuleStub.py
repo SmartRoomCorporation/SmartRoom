@@ -7,12 +7,26 @@ class TempModuleStub(SensorModule.SensorModule):
     count = 0
     leftGuiSide = ""
     rightGuiSide = ""
+    MAXREQNUMBER = 12
 
     def __init__(self, block):
         super().createGUIBlock(block)
         self.leftGuiSide = self.left_side
         self.rightGuiSide = self.right_side
         self.createTempGui(self.leftGuiSide, self.rightGuiSide)
+        self.setActuatorStatus(False)
+
+    def manualCommand(self, val):
+        self.setAutoPilot(val)
+        if(not val): self.setActuatorStatus(val)
+
+    def actuator(self):
+        if(self.getAutopilot()): 
+            if(self.getReqNumber() < self.MAXREQNUMBER): self.setReqNumber(self.getReqNumber() + 1)
+            else:
+                self.setReqNumber(0)
+                if(self.getCurrValue() > self.getThresholdValue()): self.setActuatorStatus(False)
+                else: self.setActuatorStatus(True)
 
     def startMeasure(self):
         if(self.count == 0):

@@ -12,8 +12,20 @@ GETSTATUS = "GETSTATUS"
 class SmartRoom(Thread):
     sensors = dict()
     client = mqtt.Client()
-    ip = ""
-    camera = ""
+    ip = None
+    port = 1883
+    camera = None
+    ttl = 60
+    configFile = "smartroom.conf"
+
+    def setPort(self, port):
+        self.port = port
+
+    def setTtl(self, ttl):
+        self.ttl = ttl
+
+    def setIp(self, ip):
+        self.ip = ip
 
     def setCamera(self, camera):
         self.camera = camera
@@ -32,21 +44,23 @@ class SmartRoom(Thread):
         return self.sensors
     
     def initClient(self):
-        self.client.on_connect = self.on_connect
-        self.client.on_message = self.on_message
-        self.client.on_publish = self.on_publish
-        self.client.enable_logger(logger=log)
-        self.client.on_log = self.on_log
-        self.client.connect(self.ip, 1883, 60)
-        self.client.loop_start()
-
-    def setIp(self, ip):
-        self.ip = ip
+        if(self.ip is not None):
+            self.client.on_connect = self.on_connect
+            self.client.on_message = self.on_message
+            self.client.on_publish = self.on_publish
+            self.client.enable_logger(logger=log)
+            self.client.on_log = self.on_log
+            self.client.connect(self.ip, self.port, self.ttl)
+            self.client.loop_start()
 
     def getRoomStatus(self):
         currStatus = dict()
         for key, value in self.sensors.items():
-            currStatus[key] = value.startMeasure()
+            currVal = value.startMeasure()
+            value.actuator()
+            currAct = value.getActuatorStatus()
+            autopilot = value.getAutopilot()
+            currStatus[key] = (currVal, currAct, autopilot)
         return currStatus
 
     def on_connect(self, client, userdata, flags, rc): # on connect callback
