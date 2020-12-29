@@ -39,3 +39,6 @@ class TestAirModule(unittest.TestCase):
         tms.setReqNumber(12)
         tms.actuator()
         self.assertEqual(100, tms.getActuatorStatus())
+
+if __name__ == '__main__':
+    unittest.main()

@@ -17,5 +17,7 @@ after_success:
   - coverage report -m
   - coverage run smartroom/src/test/test_TempModule.py
   - coverage report -m
+  - coverage run smartroom/src/test/test_LightModule.py
+  - coverage report -m
   
   

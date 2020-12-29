@@ -8,6 +8,8 @@ log = logging.getLogger("MQTT_LOG_DEBUG")
 topic = ':'.join(("%012X" % get_mac())[i:i+2] for i in range(0, 12, 2))
 serverTopic = ':'.join(("%012X" % get_mac())[i:i+2] for i in range(0, 12, 2))+'-server' # output from client
 GETSTATUS = "GETSTATUS"
+SENSORSLIST = "SENSORSLIST"
+UPDATESENSOR = "UPDATESENSOR"
 
 class SmartRoom(Thread):
     sensors = dict()
@@ -70,9 +72,13 @@ class SmartRoom(Thread):
     def on_message(self, client, userdata, msg): # on message callback
         if(msg.topic == topic):
             if(str(msg.payload.decode("utf-8")) == GETSTATUS):
-                client.publish(serverTopic, json.dumps(self.getRoomStatus()), qos=0, retain=False)
+                client.publish(serverTopic, json.dumps((SENSORSLIST, self.getRoomStatus())), qos=0, retain=False)
             if(str(msg.payload.decode("utf-8")) == "ciaone"):
                 print("ciaone")
+
+    def updateReq(self, sensor, data):
+        data = {sensor : data}
+        self.client.publish(serverTopic, json.dumps((UPDATESENSOR, data)), qos=0, retain=False)
 
     def on_publish(self, client, userdata, mid): # on publish callback
         return True

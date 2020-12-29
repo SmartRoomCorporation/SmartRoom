@@ -30,3 +30,6 @@ class TestTempModule(unittest.TestCase):
         tms.setReqNumber(12)
         tms.actuator()
         self.assertEqual(False, tms.getActuatorStatus())
+
+if __name__ == '__main__':
+    unittest.main()

@@ -44,7 +44,7 @@ class Gui:
         self.camPreview.image = photo
 
     def ciaone(self):
-        self.sr.getCamera().setFullScreen()
+        self.sr.updateReq("Temperature", [30, True, False])
 
     def ciaone1(self):
         self.sr.getCamera().openCamera()
