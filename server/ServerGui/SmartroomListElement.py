@@ -2,7 +2,6 @@ from tkinter import *   # from x import * is bad practice
 from tkinter.ttk import *
 from StatusCircle import StatusCircle
 from PIL import Image, ImageTk
-import ServerStatusCard
 
 
 class SmartroomListElement(Frame):
