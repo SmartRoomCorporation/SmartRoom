@@ -12,4 +12,10 @@ script:
   - pytest
 after_success:
   - coverage run smartroom/src/test/test_FaceRecon.py
-  - coverage report --fail-under=80
+  - coverage report -m
+  - coverage run smartroom/src/test/test_AirModule.py
+  - coverage report -m
+  - coverage run smartroom/src/test/test_TempModule.py
+  - coverage report -m
+  
+  

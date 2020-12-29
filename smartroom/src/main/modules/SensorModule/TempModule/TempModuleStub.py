@@ -8,6 +8,8 @@ class TempModuleStub(SensorModule.SensorModule):
     leftGuiSide = ""
     rightGuiSide = ""
     MAXREQNUMBER = 12
+    UPPERBOUND = 80
+    LOWERBOUND = -50
 
     def __init__(self, block):
         super().createGUIBlock(block)
@@ -21,6 +23,8 @@ class TempModuleStub(SensorModule.SensorModule):
         if(not val): self.setActuatorStatus(val)
 
     def actuator(self):
+        if(self.getCurrValue() < self.LOWERBOUND or self.getCurrValue() > self.UPPERBOUND):
+            return self.setActuatorStatus(None)      
         if(self.getAutopilot()): 
             if(self.getReqNumber() < self.MAXREQNUMBER): self.setReqNumber(self.getReqNumber() + 1)
             else:

@@ -7,27 +7,30 @@ class AirModuleStub(SensorModule.SensorModule):
 	FANOFF = 0
 	FANMIDDLE = 50
 	FANFULL = 100
+	LOWERBOUND = -1
+	UPPERBOUND = 201
 
 	def __init__(self, block): 
 		super().createGUIBlock(block) 
-		self.leftGuiSide = self.left_side 
-		self.rightGuiSide = self.right_side 
-		self.createTempGui(self.leftGuiSide, self.rightGuiSide) 
+		#self.createTempGui(self.leftGuiSide, self.rightGuiSide) 
 		self.setActuatorStatus(0)
 
 	def manualCommand(self, val): 
 		self.setActuatorStatus(val)
 
 	def actuator(self): 
+		if(self.getCurrValue() <= self.LOWERBOUND or self.getCurrValue() >= self.UPPERBOUND): 
+			self.setActuatorStatus(None)   
+			return False   
 		if(self.getAutopilot()): 
 			if(self.getReqNumber() < self.MAXREQNUMBER): self.setReqNumber(self.getReqNumber() + 1) 
 			else: 
 				curr = self.getCurrValue()
 				threshold = self.getThresholdValue()
 				self.setReqNumber(0) 
-				if(curr > (threshold + int(threshold/2))): self.setActuatorStatus(self.FANFULL) 
+				if(curr > (threshold + int(threshold/2))): self.setActuatorStatus(self.FANOFF) 
 				elif(curr > threshold and curr < (threshold + int(threshold/2))): self.setActuatorStatus(self.FANMIDDLE)
-				elif(curr < threshold): self.setActuatorStatus(self.FANOFF)
+				elif(curr < threshold): self.setActuatorStatus(self.FANFULL)
 
 	def startMeasure(self):
 		if self.count == 0:
@@ -36,11 +39,8 @@ class AirModuleStub(SensorModule.SensorModule):
 
 		if self.count > 0 and self.count < 20:
 			if (self.count % 3) == 0:
-				if self.getCurrValue() > 50:
-					self.setCurrValue(self.getCurrValue() - 2)
-                else:
-                    self.setCurrValue(self.getCurrValue() + 1)
-
+				if self.getCurrValue() > 50: self.setCurrValue(self.getCurrValue() - 2)
+				else: self.setCurrValue(self.getCurrValue() + 1)
 		if self.count > 30 and self.count < 60:
 			if (self.count % 3) == 0:
 				if self.getCurrValue() < 100:
