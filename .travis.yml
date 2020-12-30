@@ -8,6 +8,7 @@ install:
   - pip install opencv-python
   - pip install coverage
   - pip install paho-mqtt
+  - pip install pylint
 script:
   - pytest
 after_success:
@@ -21,5 +22,5 @@ after_success:
   - coverage report -m
   - coverage run server/src/test/test_Server.py
   - coverage report -m
-  
-  
+  - pylint smartroom
+  - pylint server
