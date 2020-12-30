@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from tkinter import *   # from x import * is bad practice
-
 # http://tkinter.unpythonic.net/wiki/VerticalScrolledFrame
 
 class VerticalScrolledFrame(LabelFrame):
@@ -26,7 +25,7 @@ class VerticalScrolledFrame(LabelFrame):
         canvas.yview_moveto(0)
 
         # create a frame inside the canvas which will be scrolled with it
-        self.interior = interior = Frame(canvas, bg = self["bg"])
+        self.interior = interior = Frame(canvas, bg = self["bg"], relief = self["relief"], bd = self["bd"])
         interior_id = canvas.create_window(0, 0, window=interior,
                                            anchor=NW)
 

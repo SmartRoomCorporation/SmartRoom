@@ -14,11 +14,11 @@ class ServerCard(tk.Frame):
 
     def initCard(self):
         label = tk.Label(text = "SmartRooms:", fg = "blue", bg = self["bg"])
-        self.frame = VerticalScrolledFrame(self, labelwidget = label, bg = self["bg"])
+        self.frame = VerticalScrolledFrame(self, labelwidget = label, bg = self["bg"], relief = "raised", bd=1)
         self.frame.pack(expand=1, fill = BOTH)
 
         for name in self.array:
-            smart_frame = SmartroomListElement(self.frame.interior, self, name, bg = self["bg"], relief = "raised", bd=1)
+            smart_frame = SmartroomListElement(self.frame.interior, self, name, bg = self["bg"], relief = "sunken", bd=1)
             smart_frame.pack(padx = 2, pady = 2, fill = X)
 
     def refreshSmartrooms(self):

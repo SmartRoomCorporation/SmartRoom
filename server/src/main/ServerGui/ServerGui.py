@@ -14,10 +14,10 @@ class ServerGui(tk.Tk):
 
     def __init__(self):
         super().__init__()
+        self.config(relief = "sunken", bd = 2)
         self.geometry("")
-        self.minsize(520, 600)
+        self.minsize(500, 500)
         self.title("SmartRooms Control Utility")
-
 
     def run(self):
         set_img = Image.open("setting.png")
@@ -26,10 +26,9 @@ class ServerGui(tk.Tk):
         self.initGui()
         self.mainloop()
 
-
     def initGui(self):
 
-        self.statusFrame = tk.LabelFrame(self, text = "Server Status:", fg="blue", bg = self["bg"])
+        self.statusFrame = tk.LabelFrame(self, text = "Server Status:", fg="blue", bg = self["bg"], relief = "raised", bd=1)
         self.statusFrame.pack(fill = tk.BOTH, padx = 10, pady = 10)
 
         frame_cs = tk.Frame(self.statusFrame, bg = self["bg"])
