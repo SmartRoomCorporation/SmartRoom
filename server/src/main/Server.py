@@ -35,6 +35,15 @@ class SmartroomServer(Thread):
     def setIp(self, ip):
         self.ip = ip
 
+    def getPort(self):
+        return self.port
+
+    def getTtl(self):
+        return self.ttl
+
+    def getIp(self):
+        return self.ip
+
     def initServer(self):
         if(self.ip is not None):
             self.server.on_connect = self.on_connect
@@ -96,13 +105,16 @@ class SmartroomServer(Thread):
         if(request == SENSORSLIST):
             for key, value in data.items():
                 sr.addSensor(key, value)
+            return False
         if(request == UPDATESENSOR):
             for key, value in data.items():
                 sr.updateSensor(key, value)
+            return False
     
     def printSrSensors(self, sr):
         for key, value in sr.getSensorsList().items():
             pprint(key)
             pprint(value.getCurrentValue())
+            pprint(value.getThresholdValue())
             pprint(value.getActuator())
             pprint(value.getAutopilot())

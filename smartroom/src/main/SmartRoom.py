@@ -10,6 +10,12 @@ serverTopic = ':'.join(("%012X" % get_mac())[i:i+2] for i in range(0, 12, 2))+'-
 GETSTATUS = "GETSTATUS"
 SENSORSLIST = "SENSORSLIST"
 UPDATESENSOR = "UPDATESENSOR"
+COMMAND = "COMMAND"
+RISE = "RISE"
+REDUCE = "REDUCE"
+AUTOON = "AUTOON"
+AUTOOFF = "AUTOOFF"
+ACTUATOR = "ACTUATOR"
 
 class SmartRoom(Thread):
     sensors = dict()
@@ -60,9 +66,10 @@ class SmartRoom(Thread):
         for key, value in self.sensors.items():
             currVal = value.startMeasure()
             value.actuator()
+            currTh = value.getThresholdValue()
             currAct = value.getActuatorStatus()
             autopilot = value.getAutopilot()
-            currStatus[key] = (currVal, currAct, autopilot)
+            currStatus[key] = (currVal, currTh, currAct, autopilot)
         return currStatus
 
     def on_connect(self, client, userdata, flags, rc): # on connect callback
@@ -71,10 +78,7 @@ class SmartRoom(Thread):
 
     def on_message(self, client, userdata, msg): # on message callback
         if(msg.topic == topic):
-            if(str(msg.payload.decode("utf-8")) == GETSTATUS):
-                client.publish(serverTopic, json.dumps((SENSORSLIST, self.getRoomStatus())), qos=0, retain=False)
-            if(str(msg.payload.decode("utf-8")) == "ciaone"):
-                print("ciaone")
+            self.decodeMessage(json.loads(str(msg.payload.decode("utf-8"))))
 
     def updateReq(self, sensor, data):
         data = {sensor : data}
@@ -95,3 +99,22 @@ class SmartRoom(Thread):
     def stopClient(self):
         self.client.loop_stop()
         self.client.disconnect()
+
+    def decodeMessage(self, request):
+        if(request == GETSTATUS):
+            client.publish(serverTopic, json.dumps((SENSORSLIST, self.getRoomStatus())), qos=0, retain=False)
+            return False
+        try:
+            data = request.pop()
+            request = request[0]
+        except:
+            return False # TODO raise exception uknown request
+        if(request == COMMAND):
+            sensor = self.getSensor(data[0])
+            command = data[1]
+            if(command == RISE): sensor.rise()
+            if(command == REDUCE): sensor.reduce()
+            if(command == AUTOON): sensor.setAutoPilot(True)
+            if(command == AUTOOFF): sensor.setAutoPilot(False)
+            if(command == ACTUATOR): sensor.serverCommand(data[2:len(data)-1])
+            self.updateReq(data[0], sensor.getSensorStatus())

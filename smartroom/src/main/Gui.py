@@ -44,7 +44,7 @@ class Gui:
         self.camPreview.image = photo
 
     def ciaone(self):
-        self.sr.updateReq("Temperature", [30, True, False])
+        self.sr.updateReq("Temperature", [30, 40, True, False])
 
     def ciaone1(self):
         self.sr.getCamera().openCamera()

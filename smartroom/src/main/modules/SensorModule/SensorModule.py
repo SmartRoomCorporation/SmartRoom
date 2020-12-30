@@ -35,6 +35,9 @@ class SensorModule:
 		self.left_side=frame1
 		self.right_side=frame2
 
+	def getSensorStatus(self): 
+		return [self.getCurrValue(), self.getThresholdValue(), self.getActuatorStatus(), self.getAutopilot()]
+
 	def getReqNumber(self): 
 		return self.req_number
 
@@ -63,4 +66,13 @@ class SensorModule:
 		return 0
 
 	def actuator(self): 
+		return 0
+
+	def rise(self): 
+		return 0
+
+	def reduce(self): 
+		return 0
+
+	def serverCommand(self): 
 		return 0

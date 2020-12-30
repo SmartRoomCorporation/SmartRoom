@@ -2,6 +2,7 @@ class TempSensor:
     autopilot = True
     actuator = False
     current_val = 0
+    threshold_val = 0
 
     def setAutoPilot(self, val):
         self.autopilot = val
@@ -20,3 +21,9 @@ class TempSensor:
 
     def getCurrentValue(self):
         return self.current_val
+
+    def setThresholdValue(self, val):
+        self.threshold_val = val
+
+    def getThresholdValue(self):
+        return self.threshold_val

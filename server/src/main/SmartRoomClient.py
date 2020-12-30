@@ -1,6 +1,7 @@
 from Sensors.AirSensor import AirSensor
 from Sensors.TempSensor import TempSensor
 from Sensors.LightSensor import LightSensor
+from pprint import pprint
 
 class SmartRoomClient:
     macaddress = ""
@@ -30,15 +31,17 @@ class SmartRoomClient:
             s = LightSensor()
         else: return False # TODO RAISE EXCEPTION
         s.setCurrentValue(data[0])
-        s.setActuator(data[1])
-        s.setAutoPilot(data[2])
+        s.setThresholdValue(data[1])
+        s.setActuator(data[2])
+        s.setAutoPilot(data[3])
         self.sensors[sensor] = s
 
     def updateSensor(self, sensor, data):
         if(sensor in self.sensors):
             self.sensors[sensor].setCurrentValue(data[0])
-            self.sensors[sensor].setActuator(data[1])
-            self.sensors[sensor].setAutoPilot(data[2])
+            self.sensors[sensor].setThresholdValue(data[1])
+            self.sensors[sensor].setActuator(data[2])
+            self.sensors[sensor].setAutoPilot(data[3])
         else: return False # TODO RAISE EXCEPTION
 
     def isConnected(self):

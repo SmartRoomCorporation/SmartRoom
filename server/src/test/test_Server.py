@@ -8,10 +8,10 @@ from main.SmartRoomClient import SmartRoomClient
 import json
 from pprint import pprint
 
-server = None
-sr = None
-
 class TestServer(unittest.TestCase):
+
+    server = None
+    sr = None
 
     @classmethod
     def setUpClass(cls):
@@ -26,35 +26,39 @@ class TestServer(unittest.TestCase):
         cls.server = None
 
     def testSensorsListRequest(self):
-        d = ["SENSORSLIST", {'Temperature': [15, False, True], 'Light': [1500, 0, True], 'Air': [80, 0, True]}]
+        d = ["SENSORSLIST", {'Temperature': [15, 25, False, True], 'Light': [1500, 5000, 0, True], 'Air': [80, 100, 0, True]}]
         self.server.decodeMessage("STUBTOPIC-server", d)
         sr = self.server.getSmartRoomClient("STUBTOPIC")
         sensor = sr.getSensor("Temperature")
         self.assertEqual(15, sensor.getCurrentValue())
+        self.assertEqual(25, sensor.getThresholdValue())
         self.assertEqual(False, sensor.getActuator())
         self.assertEqual(True, sensor.getAutopilot())
         sensor = sr.getSensor("Light")
         self.assertEqual(1500, sensor.getCurrentValue())
+        self.assertEqual(5000, sensor.getThresholdValue())
         self.assertEqual(0, sensor.getActuator())
         self.assertEqual(True, sensor.getAutopilot())
         sensor = sr.getSensor("Air")
         self.assertEqual(80, sensor.getCurrentValue())
+        self.assertEqual(100, sensor.getThresholdValue())
         self.assertEqual(0, sensor.getActuator())
         self.assertEqual(True, sensor.getAutopilot())
 
     def testUpdateSensorRequest(self):
-        d = ["SENSORSLIST", {'Temperature': [15, False, True], 'Light': [1500, 0, True], 'Air': [80, 0, True]}]
+        d = ["SENSORSLIST", {'Temperature': [15, 25, False, True], 'Light': [1500, 5000, 0, True], 'Air': [80, 100, 0, True]}]
         self.server.decodeMessage("STUBTOPIC-server", d)
         sr = self.server.getSmartRoomClient("STUBTOPIC")
         sensor = sr.getSensor("Air")
         self.assertEqual(80, sensor.getCurrentValue())
         self.assertEqual(0, sensor.getActuator())
         self.assertEqual(True, sensor.getAutopilot())
-        d = ["UPDATESENSOR", {'Air': [7000, 50, False]}]
+        d = ["UPDATESENSOR", {'Air': [7000, 5000, 50, False]}]
         self.server.decodeMessage("STUBTOPIC-server", d)
         sr = self.server.getSmartRoomClient("STUBTOPIC")
         sensor = sr.getSensor("Air")
         self.assertEqual(7000, sensor.getCurrentValue())
+        self.assertEqual(5000, sensor.getThresholdValue())
         self.assertEqual(50, sensor.getActuator())
         self.assertEqual(False, sensor.getAutopilot())
 

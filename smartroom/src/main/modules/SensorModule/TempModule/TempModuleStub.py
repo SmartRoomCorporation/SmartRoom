@@ -10,9 +10,12 @@ class TempModuleStub(SensorModule.SensorModule):
     MAXREQNUMBER = 12
     UPPERBOUND = 80
     LOWERBOUND = -50
+    ON = "ON"
+    OFF = "OFF" 
 
     def __init__(self):
         self.setActuatorStatus(False)
+        self.setThresholdValue(25)
 
     def initGui(self, block):
         super().createGUIBlock(block)
@@ -57,6 +60,22 @@ class TempModuleStub(SensorModule.SensorModule):
             self.count = 0
         return self.getCurrValue()
 
+    def rise(self): 
+        currentTh = self.getThresholdValue()
+        newTh = currentTh + 1
+        if(newTh >= 30): self.setThresholdValue(30)
+        else: self.setThresholdValue(newTh)
+
+    def reduce(self): 
+        currentTh = self.getThresholdValue()
+        newTh = currentTh - 1
+        if(newTh <= 18): self.setThresholdValue(18)
+        else: self.setThresholdValue(newTh)
+
+    def serverCommand(self, data):
+        if(data == self.OFF): self.manualCommand(False)
+        elif(data == self.ON): self.manualCommand(True)
+
     def getGUIBlock(self):
         return self.guiBlock
 
@@ -67,19 +86,15 @@ class TempModuleStub(SensorModule.SensorModule):
         up1 = Image.open(self.getResDir() + "/res/assets/general/down.png")
         up1 = up1.resize((20, 20))
         self.up_icon1 = ImageTk.PhotoImage(up1)
-        text = "Sensore 1:"
-        text_output = tk.Label(left, text=text, fg="Green", font=("Helevetica",16))
+        text_output = tk.Label(left, text="Sensore 1:", fg="Green", font=("Helevetica",16))
         text_output.grid(row=1, column=1, padx=50, sticky="W")
-        text = "valore:"
-        text_output = tk.Label(left, text=text, fg="black", font=("Helevetica",13))
+        text_output = tk.Label(left, text="valore:", fg="black", font=("Helevetica",13))
         text_output.grid(row=2, column=1, padx=50, sticky="W")
-        text = "Trigger:"
-        text_output = tk.Label(left, text=text, fg="black", font=("Helevetica",13))
+        text_output = tk.Label(left, text="Trigger:", fg="black", font=("Helevetica",13))
         text_output.grid(row=3, column=1, padx=50, sticky="W")
         first_button = tk.Button(right, image=self.up_icon)
         first_button.grid(row=1, column=1, padx=50, sticky="W")
         first_button = tk.Button(right, image=self.up_icon1)
         first_button.grid(row=2, column=1, padx=50, sticky="W")
-        text = "Stato: "
-        text_output = tk.Label(left, text=text, fg="black", font=("Helevetica",13))
+        text_output = tk.Label(left, text="Stato: ",fg="black", font=("Helevetica",13))
         text_output.grid(row=4, column=1, padx=50, sticky="W")

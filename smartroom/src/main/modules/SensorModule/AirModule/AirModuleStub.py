@@ -9,8 +9,11 @@ class AirModuleStub(SensorModule.SensorModule):
 	FANFULL = 100
 	LOWERBOUND = -1
 	UPPERBOUND = 201
+	FANUP = "FANUP"
+	FANDOWN = "FANDOWN"
 
 	def __init__(self): 
+		self.setThresholdValue(100)
 		self.setActuatorStatus(0)
 
 	def initGui(self, block): 
@@ -54,3 +57,27 @@ class AirModuleStub(SensorModule.SensorModule):
 
 		self.count = self.count + 1
 		return self.getCurrValue()
+
+	def rise(self): 
+		currentTh = self.getThresholdValue()
+		newTh = currentTh + 20
+		if(newTh >= 200): self.setThresholdValue(200)
+		else: self.setThresholdValue(newTh)
+
+	def reduce(self): 
+		currentTh = self.getThresholdValue()
+		newTh = currentTh - 20
+		if(newTh <= 0): self.setThresholdValue(0)
+		else: self.setThresholdValue(newTh)
+
+	def serverCommand(self, data):
+		if(data == self.FANUP):
+			currentSpeed = self.getActuatorStatus()
+			if(currentSpeed == self.FANMIDDLE): self.manualCommand(self.FANFULL)
+			elif(currentSpeed == self.FANOFF): self.manualCommand(self.FANMIDDLE)
+			return False
+		if(data == self.FANDOWN): 
+			currentSpeed = self.getActuatorStatus()
+			if(currentSpeed == self.FANMIDDLE): self.manualCommand(self.FANOFF)
+			elif(currentSpeed == self.FANFULL): self.manualCommand(self.FANMIDDLE)
+			return False

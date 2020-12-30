@@ -9,9 +9,12 @@ class LightModuleStub(SensorModule.SensorModule):
 	DIMMERFULL = 100
 	LOWERBOUND = -1
 	UPPERBOUND = 10001
+	LIGHTUP = "LIGHTUP"
+	LIGHTDOWN = "LIGHTDOWN"
 
 	def __init__(self): 
 		self.setActuatorStatus(0)
+		self.setThresholdValue(5000)
 
 	def initGui(self, block): 
 		super().createGUIBlock(block)
@@ -53,3 +56,27 @@ class LightModuleStub(SensorModule.SensorModule):
 
 		self.count = self.count + 1
 		return self.getCurrValue()
+
+	def rise(self): 
+		currentTh = self.getThresholdValue()
+		newTh = currentTh + 500
+		if(newTh >= 10000): self.setThresholdValue(10000)
+		else: self.setThresholdValue(newTh)
+
+	def reduce(self): 
+		currentTh = self.getThresholdValue()
+		newTh = currentTh - 500
+		if(newTh <= 0): self.setThresholdValue(0)
+		else: self.setThresholdValue(newTh)
+
+	def serverCommand(self, data):
+		if(data == self.LIGHTUP):
+			currentLight = self.getActuatorStatus()
+			if(currentLight == self.DIMMERMIDDLE): self.manualCommand(self.DIMMERFULL)
+			elif(currentLight == self.DIMMEROFF): self.manualCommand(self.DIMMERMIDDLE)
+			return False
+		if(data == self.LIGHTDOWN): 
+			currentLight = self.getActuatorStatus()
+			if(currentLight == self.DIMMERMIDDLE): self.manualCommand(self.DIMMEROFF)
+			elif(currentLight == self.DIMMERFULL): self.manualCommand(self.DIMMERMIDDLE)
+			return False
