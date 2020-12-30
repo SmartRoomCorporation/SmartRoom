@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from tkinter import *   # from x import * is bad practice
-from tkinter.ttk import *
-
 # http://tkinter.unpythonic.net/wiki/VerticalScrolledFrame
 
 class VerticalScrolledFrame(LabelFrame):
@@ -12,7 +10,7 @@ class VerticalScrolledFrame(LabelFrame):
     * This frame only allows vertical scrolling
     """
     def __init__(self, parent, *args, **kw):
-        LabelFrame.__init__(self, parent, *args, **kw)
+        super().__init__(parent, *args, **kw)
         self.parent = parent
         # create a canvas object and a vertical scrollbar for scrolling it
         vscrollbar = Scrollbar(self, orient=VERTICAL)
@@ -27,7 +25,7 @@ class VerticalScrolledFrame(LabelFrame):
         canvas.yview_moveto(0)
 
         # create a frame inside the canvas which will be scrolled with it
-        self.interior = interior = Frame(canvas)
+        self.interior = interior = Frame(canvas, bg = self["bg"], relief = self["relief"], bd = self["bd"])
         interior_id = canvas.create_window(0, 0, window=interior,
                                            anchor=NW)
 
