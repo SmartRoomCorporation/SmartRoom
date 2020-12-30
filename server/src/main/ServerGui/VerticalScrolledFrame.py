@@ -15,7 +15,7 @@ class VerticalScrolledFrame(LabelFrame):
         # create a canvas object and a vertical scrollbar for scrolling it
         vscrollbar = Scrollbar(self, orient=VERTICAL)
         vscrollbar.pack(fill=Y, side=RIGHT, expand=FALSE)
-        canvas = Canvas(self, bd=0, highlightthickness=0,
+        self.canvas = canvas = Canvas(self, bd=0, highlightthickness=0,
                         yscrollcommand=vscrollbar.set)
         canvas.pack(side=LEFT, fill=BOTH, expand=TRUE)
         vscrollbar.config(command=canvas.yview)
@@ -23,7 +23,7 @@ class VerticalScrolledFrame(LabelFrame):
         # reset the view
         canvas.xview_moveto(0)
         canvas.yview_moveto(0)
-
+        canvas.bind_all("<MouseWheel>", self._on_mousewheel)
         # create a frame inside the canvas which will be scrolled with it
         self.interior = interior = Frame(canvas, bg = self["bg"], relief = self["relief"], bd = self["bd"])
         interior_id = canvas.create_window(0, 0, window=interior,
@@ -48,3 +48,6 @@ class VerticalScrolledFrame(LabelFrame):
 
         def getParent(self):
             return self.parent()
+
+    def _on_mousewheel(self, event):
+        self.canvas.yview_scroll(int(-1*(event.delta/120)), "units")
