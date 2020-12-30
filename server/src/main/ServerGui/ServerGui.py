@@ -5,27 +5,30 @@ from pprint import pprint
 from StatusCircle import StatusCircle
 from ServerConfig import ServerConfig
 
-class ServerGui:
-    window = tk.Tk()
-    window.geometry("600x600")
-    window.minsize(520, 600)
-    window.title("SmartRooms Control Utility")
+class ServerGui(tk.Tk):
+
     set_icon = None
     curr_ip = "1.1.1.1"
     curr_port = "0000"
 
     def __init__(self):
+        super().__init__()
+        self.geometry("600x600")
+        self.minsize(520, 600)
+        self.title("SmartRooms Control Utility")
+
+
+    def run(self):
         set_img = Image.open("setting.png")
         set_img = set_img.resize((20, 20))
         self.set_icon = ImageTk.PhotoImage(set_img)
-
-    def run(self):
         self.initGui()
-        self.window.mainloop()
+        self.mainloop()
 
 
     def initGui(self):
-        self.statusFrame = tk.LabelFrame(self.window, text = "Server Status:", fg="blue")
+
+        self.statusFrame = tk.LabelFrame(self, text = "Server Status:", fg="blue")
         self.statusFrame.pack(fill = tk.BOTH, padx = 10, pady = 10)
 
         frame_cs = tk.Frame(self.statusFrame)
@@ -56,12 +59,17 @@ class ServerGui:
         configButton = tk.Button(self.statusFrame, image = self.set_icon, command = self.configWindow)
         configButton.grid(row = 0, column = 3, sticky = "se",  padx= 5, pady = 5)
 
-        statusCard = ServerCard(self.window)
-        statusCard.pack(expand=1, fill = tk.BOTH, padx = 10, pady = 10)
+        self.statusCard = ServerCard(self)
+        self.statusCard.pack(expand=1, fill = tk.BOTH, padx = 10, pady = 10)
 
-        statusCard.initCard()
+        self.statusCard.initCard()
 
     def configWindow(self):
-        config_window = ServerConfig(master = self.window)
+        config_window = ServerConfig(master = self)
         config_window.fillWindow(self.curr_ip, self.curr_port)
-        self.window.wm_attributes("-disabled", True)
+        self.wm_attributes("-topmost", False)
+
+    def refreshInterface(self):
+        self.statusFrame.destroy()
+        self.statusCard.destroy()
+        self.initGui()

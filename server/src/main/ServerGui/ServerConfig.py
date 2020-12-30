@@ -9,7 +9,7 @@ class ServerConfig(tk.Toplevel):
     def __init__(self, master = None):
         self.master = master
         super().__init__(master = master)
-        self.geometry("400x190")
+        self.geometry("390x190")
         self.resizable(width=False, height=False)
         self.protocol("WM_DELETE_WINDOW", self.onClose)
         self.title("Connection Setting")
@@ -51,10 +51,14 @@ class ServerConfig(tk.Toplevel):
         back_button = tk.Button(self, text = "Back", command = self.onClose)
         back_button.grid(row = 2, sticky = "sw", padx = 10, pady = 10)
 
-        save_button = tk.Button(self, text = "Save")
+        save_button = tk.Button(self, text = "Save", command = self.onSave)
         save_button.grid(row = 2, sticky = "se", padx = 10, pady = 10)
 
 
     def onClose(self):
-        self.master.wm_attributes("-disabled", False)
+        self.master.wm_attributes("-topmost", True)
         self.destroy()
+
+    def onSave(self):
+        self.master.refreshInterface()
+        self.onClose()
