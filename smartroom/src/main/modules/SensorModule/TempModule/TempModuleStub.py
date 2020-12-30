@@ -11,7 +11,7 @@ class TempModuleStub(SensorModule.SensorModule):
     UPPERBOUND = 80
     LOWERBOUND = -50
     ON = "ON"
-    OFF = "OFF" 
+    OFF = "OFF"
 
     def __init__(self):
         self.setActuatorStatus(False)
@@ -29,8 +29,8 @@ class TempModuleStub(SensorModule.SensorModule):
 
     def actuator(self):
         if(self.getCurrValue() < self.LOWERBOUND or self.getCurrValue() > self.UPPERBOUND):
-            return self.setActuatorStatus(None)      
-        if(self.getAutopilot()): 
+            return self.setActuatorStatus(None)
+        if(self.getAutopilot()):
             if(self.getReqNumber() < self.MAXREQNUMBER): self.setReqNumber(self.getReqNumber() + 1)
             else:
                 self.setReqNumber(0)
@@ -39,34 +39,37 @@ class TempModuleStub(SensorModule.SensorModule):
 
     def startMeasure(self):
         if(self.count == 0):
-            self.count = self.count + 1
             self.setCurrValue(15)
         if(self.count > 0 and self.count < 20):
-            self.count = self.count + 1
-            self.setCurrValue(16)
             if(self.count % 3 == 0):
-                if (self.getCurrValue() > 10): 
+                if (self.getCurrValue() > 10):
                     self.setCurrValue(self.getCurrValue() - 1)
                 else:
                     self.setCurrValue(self.getCurrValue() + 1)
         if(self.count > 30 and self.count < 60):
-            self.setCurrValue(18)
             if(self.count % 3 == 0):
-                if (self.getCurrValue() < 28): 
+                if (self.getCurrValue() < 28):
                     self.setCurrValue(self.getCurrValue() - 1)
                 else:
                     self.setCurrValue(self.getCurrValue() + 1)
         if(self.count > 70):
             self.count = 0
+        self.count = self.count + 1
         return self.getCurrValue()
 
-    def rise(self): 
+	def getCount(self):
+		return self.count
+
+	def setCount(self, val):
+		self.count = val
+
+    def rise(self):
         currentTh = self.getThresholdValue()
         newTh = currentTh + 1
         if(newTh >= 30): self.setThresholdValue(30)
         else: self.setThresholdValue(newTh)
 
-    def reduce(self): 
+    def reduce(self):
         currentTh = self.getThresholdValue()
         newTh = currentTh - 1
         if(newTh <= 18): self.setThresholdValue(18)
