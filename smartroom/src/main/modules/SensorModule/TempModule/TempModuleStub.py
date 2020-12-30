@@ -55,13 +55,13 @@ class TempModuleStub(SensorModule.SensorModule):
         if(self.count > 70):
             self.count = 0
         self.count = self.count + 1
-        return self.getCurrValue()
-
-	def getCount(self):
-		return self.count
-
-	def setCount(self, val):
-		self.count = val
+        return self.getCurrValue() 
+        
+    def getCount(self): 
+        return self.count 
+    
+    def setCount(self, val): 
+        self.count = val
 
     def rise(self):
         currentTh = self.getThresholdValue()

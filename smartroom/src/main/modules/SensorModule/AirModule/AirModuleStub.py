@@ -54,7 +54,7 @@ class AirModuleStub(SensorModule.SensorModule):
 		self.count = self.count + 1
 		return self.getCurrValue()
 
-	def getCount(self):
+	def getCount(self): 
 		return self.count
 
 	def setCount(self, val):

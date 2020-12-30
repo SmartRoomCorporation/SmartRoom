@@ -50,6 +50,9 @@ class TestAirModule(unittest.TestCase):
         self.assertEqual(100, self.tms.getActuatorStatus())
 
     def testRise(self): # testRISE
+        self.tms.setThresholdValue(100)
+        self.tms.rise()
+        self.assertEqual(120, self.tms.getThresholdValue())
         self.tms.setThresholdValue(180)
         self.tms.rise()
         self.assertEqual(200, self.tms.getThresholdValue())
@@ -58,6 +61,9 @@ class TestAirModule(unittest.TestCase):
         self.assertEqual(200, self.tms.getThresholdValue())
 
     def testReduce(self): # testREDUCE
+        self.tms.setThresholdValue(60)
+        self.tms.reduce()
+        self.assertEqual(40, self.tms.getThresholdValue())
         self.tms.setThresholdValue(20)
         self.tms.reduce()
         self.assertEqual(0, self.tms.getThresholdValue())
@@ -84,6 +90,32 @@ class TestAirModule(unittest.TestCase):
         self.tms.setActuatorStatus(100)
         self.tms.serverCommand("FANDOWN")
         self.assertEqual(50, self.tms.getActuatorStatus())
+
+    def testStartMeasure(self): # testStartMeasure
+        self.tms.setCount(0)
+        self.assertEqual(80, self.tms.startMeasure())
+        self.tms.setCount(15)
+        self.tms.setCurrValue(60)
+        self.assertEqual(58, self.tms.startMeasure())
+        self.tms.setCount(15)
+        self.tms.setCurrValue(40)
+        self.assertEqual(41, self.tms.startMeasure())
+        self.tms.setCount(33)
+        self.tms.setCurrValue(85)
+        self.assertEqual(90, self.tms.startMeasure())
+        self.tms.setCount(33)
+        self.tms.setCurrValue(103)
+        self.assertEqual(100, self.tms.startMeasure())
+        self.tms.setCount(80)
+        self.tms.setCurrValue(103)
+        self.assertEqual(103, self.tms.startMeasure())
+
+    def testGetCurrentStatus(self): # testGetSensorStatus
+        self.tms.setCurrValue(200)
+        self.tms.setAutoPilot(False)
+        self.tms.setActuatorStatus(50)
+        self.tms.setThresholdValue(130)
+        self.assertListEqual([200, 130, 50, False], self.tms.getSensorStatus())
 
 if __name__ == '__main__':
     unittest.main()
