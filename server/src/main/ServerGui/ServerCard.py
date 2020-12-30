@@ -13,12 +13,12 @@ class ServerCard(tk.Frame):
         tk.Frame.__init__(self, window, *args, **kw)
 
     def initCard(self):
-        label = tk.Label(text = "SmartRooms:", fg = "blue")
-        self.frame = VerticalScrolledFrame(self, labelwidget = label)
+        label = tk.Label(text = "SmartRooms:", fg = "blue", bg = self["bg"])
+        self.frame = VerticalScrolledFrame(self, labelwidget = label, bg = self["bg"])
         self.frame.pack(expand=1, fill = BOTH)
 
         for name in self.array:
-            smart_frame = SmartroomListElement(self.frame.interior, self, name)
+            smart_frame = SmartroomListElement(self.frame.interior, self, name, bg = self["bg"])
             smart_frame.config(relief=tk.SOLID)
             smart_frame.pack(padx = 5, pady = 5, fill = X)
 
@@ -28,7 +28,7 @@ class ServerCard(tk.Frame):
 
     def roomCard(self):
         self.frame.destroy()
-        self.frame = tk.Frame(self)
+        self.frame = tk.Frame(self, bg = self["bg"])
         self.frame.pack()
         b = tk.Button(self.frame, text = "Back", command = self.refreshSmartrooms)
         b.pack()
