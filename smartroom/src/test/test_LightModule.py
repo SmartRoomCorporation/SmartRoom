@@ -56,6 +56,9 @@ class TestAirModule(unittest.TestCase):
         self.tms.setThresholdValue(9500)
         self.tms.rise()
         self.assertEqual(10000, self.tms.getThresholdValue())
+        self.tms.setThresholdValue(9000)
+        self.tms.rise()
+        self.assertEqual(9500, self.tms.getThresholdValue())
 
     def testReduce(self): # testREDUCE
         self.tms.setThresholdValue(0)
@@ -64,6 +67,9 @@ class TestAirModule(unittest.TestCase):
         self.tms.setThresholdValue(500)
         self.tms.reduce()
         self.assertEqual(0, self.tms.getThresholdValue())
+        self.tms.setThresholdValue(1000)
+        self.tms.reduce()
+        self.assertEqual(500, self.tms.getThresholdValue())
 
     def testServerCommand(self): # testSERVERCOMMAND
         self.tms.setActuatorStatus(100)
@@ -84,6 +90,34 @@ class TestAirModule(unittest.TestCase):
         self.tms.setActuatorStatus(100)
         self.tms.serverCommand("LIGHTDOWN")
         self.assertEqual(50, self.tms.getActuatorStatus())
+
+    def testStartMeasure(self): #testStartMesaure
+        self.tms.setCount(0)
+        self.assertEqual(1500,self.tms.startMeasure())
+        self.assertEqual(1,self.tms.getCount())
+        self.tms.setCurrValue(1200)
+        self.tms.setCount(3)
+        self.assertEqual(1050,self.tms.startMeasure())
+        self.tms.setCurrValue(900)
+        self.tms.setCount(3)
+        self.assertEqual(980,self.tms.startMeasure())
+        self.tms.setCurrValue(2000)
+        self.tms.setCount(33)
+        self.assertEqual(2150,self.tms.startMeasure())
+        self.tms.setCurrValue(2600)
+        self.tms.setCount(33)
+        self.assertEqual(2500,self.tms.startMeasure())
+        self.tms.setCurrValue(1200)
+        self.tms.setCount(72)
+        self.assertEqual(1200,self.tms.startMeasure())
+
+    def testgetSensorStatus(self):
+        self.tms.setCurrValue(2000)
+        self.tms.setAutoPilot(True)
+        self.tms.setActuatorStatus(100)
+        self.tms.setThresholdValue(5000)
+        self.assertListEqual([2000, 5000, 100, True],self.tms.getSensorStatus())
+
 
 if __name__ == '__main__':
     unittest.main()
