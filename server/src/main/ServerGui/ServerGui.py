@@ -11,7 +11,7 @@ class ServerGui:
     window.minsize(520, 600)
     window.title("SmartRooms Control Utility")
     set_icon = None
-    curr_ip = "0.0.0.0"
+    curr_ip = "1.1.1.1"
     curr_port = "0000"
 
     def __init__(self):
@@ -52,7 +52,7 @@ class ServerGui:
         port_lab.pack(side = tk.LEFT,  padx= 5, pady = 5)
 
         self.statusFrame.grid_columnconfigure(3, weight=1)
-        
+
         configButton = tk.Button(self.statusFrame, image = self.set_icon, command = self.configWindow)
         configButton.grid(row = 0, column = 3, sticky = "se",  padx= 5, pady = 5)
 
@@ -62,5 +62,6 @@ class ServerGui:
         statusCard.initCard()
 
     def configWindow(self):
-        ServerConfig(master = self.window)
+        config_window = ServerConfig(master = self.window)
+        config_window.fillWindow(self.curr_ip, self.curr_port)
         self.window.wm_attributes("-disabled", True)
