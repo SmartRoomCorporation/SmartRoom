@@ -15,7 +15,6 @@ class ServerGui(tk.Tk):
     def __init__(self):
         super().__init__()
         self.geometry("")
-        self.configure(bg = "white")
         self.minsize(520, 600)
         self.title("SmartRooms Control Utility")
 

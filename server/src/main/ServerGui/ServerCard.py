@@ -18,9 +18,8 @@ class ServerCard(tk.Frame):
         self.frame.pack(expand=1, fill = BOTH)
 
         for name in self.array:
-            smart_frame = SmartroomListElement(self.frame.interior, self, name, bg = self["bg"])
-            smart_frame.config(relief=tk.SOLID)
-            smart_frame.pack(padx = 5, pady = 5, fill = X)
+            smart_frame = SmartroomListElement(self.frame.interior, self, name, bg = self["bg"], relief = "raised", bd=1)
+            smart_frame.pack(padx = 2, pady = 2, fill = X)
 
     def refreshSmartrooms(self):
         self.frame.destroy()
