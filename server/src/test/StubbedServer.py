@@ -38,5 +38,5 @@ server.on_message = on_message
 server.on_connect = on_connect
 
 
-server.connect("87.7.152.200", 1883, 60)
+server.connect("127.0.0.1", 1883, 60)
 server.loop_forever()

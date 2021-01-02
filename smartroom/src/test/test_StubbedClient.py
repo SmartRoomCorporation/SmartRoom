@@ -16,7 +16,7 @@ class TestClient(unittest.TestCase):
     @classmethod
     def setup_class(cls):
         cls.client = SmartRoom()
-        cls.client.setIp("87.7.152.200")
+        cls.client.setIp("127.0.0.1")
         tm = TempModuleStub()
         lm = LightModuleStub()
         am = AirModuleStub()
