@@ -7,7 +7,7 @@ services:
 cache: pip
 before_install:
   - docker pull matteobosco/smartroomserver:latest
-  - docker run -d -p 1883:1883 matteobosco/smartroomserver /init.sh
+  - docker run -d -p 0.0.0.0:1883:1883 matteobosco/smartroomserver /init.sh
 install:
   - pip install face-recognition
   - pip install opencv-python
