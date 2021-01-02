@@ -16,6 +16,7 @@ REDUCE = "REDUCE"
 AUTOON = "AUTOON"
 AUTOOFF = "AUTOOFF"
 ACTUATOR = "ACTUATOR"
+SUBSCRIBED = "SUBSCRIBED"
 
 class SmartRoom(Thread):
     sensors = dict()
@@ -68,7 +69,7 @@ class SmartRoom(Thread):
             value.actuator()
             currTh = value.getThresholdValue()
             currAct = value.getActuatorStatus()
-            autopilot = value.getAutopilot()
+            autopilot = value.getAutoPilot()
             currStatus[key] = (currVal, currTh, currAct, autopilot)
         return currStatus
 
@@ -105,13 +106,14 @@ class SmartRoom(Thread):
 
     def decodeMessage(self, request):
         if(request == GETSTATUS):
-            client.publish(serverTopic, json.dumps((SENSORSLIST, self.getRoomStatus())), qos=0, retain=False)
+            self.client.publish(serverTopic, json.dumps((SENSORSLIST, self.getRoomStatus())), qos=0, retain=False)
             return False
         try:
             data = request.pop()
             request = request[0]
         except:
             return False
+        if(request == SUBSCRIBED): print("Subscribed on " + data)
         if(request == COMMAND):
             sensor = self.getSensor(data[0])
             command = data[1]

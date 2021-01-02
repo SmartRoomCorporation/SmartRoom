@@ -1,4 +1,4 @@
-iimport paho.mqtt.client as mqtt
+import paho.mqtt.client as mqtt
 from threading import Thread
 from uuid import getnode as get_mac
 import json

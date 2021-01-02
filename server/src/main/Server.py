@@ -12,6 +12,7 @@ log = logging.getLogger("MQTT_LOG_DEBUG")
 GETSTATUS = "GETSTATUS"
 SENSORSLIST = "SENSORSLIST"
 UPDATESENSOR = "UPDATESENSOR"
+SUBSCRIBED = "SUBSCRIBED"
 
 # clientTopic input from client
 # serverTopic output from server
@@ -90,9 +91,10 @@ class SmartroomServer(Thread):
         sr = SmartRoomClient()
         sr.setMacAddress(clientTopic)
         self.addSmartRoomClient(clientTopic, sr)
-        self.server.publish(clientTopic, "Subscribed on " + clientTopic, qos=0, retain=False)
+        sub = [SUBSCRIBED, clientTopic]
+        self.server.publish(clientTopic, json.dumps(sub), qos=0, retain=False)
         self.server.subscribe(serverTopic)
-        self.server.publish(clientTopic, GETSTATUS, qos=0, retain=False)
+        self.server.publish(clientTopic, json.dumps(GETSTATUS), qos=0, retain=False)
 
     def sanitizeTopic(self, topic):
         return topic[0:len(topic)-7] 
