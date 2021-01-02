@@ -7,6 +7,7 @@ from SmartRoomClient import SmartRoomClient
 import json
 import logging
 from threading import Thread
+import time
 
 log = logging.getLogger("MQTT_LOG_DEBUG")
 GETSTATUS = "GETSTATUS"
@@ -18,7 +19,7 @@ SUBSCRIBED = "SUBSCRIBED"
 # serverTopic output from server
 
 #configFile = "smartroom.conf"
- 
+
 
 class SmartroomServer(Thread):
     smartrooms = dict() # list of clients connected
@@ -66,6 +67,12 @@ class SmartroomServer(Thread):
         if(topic in self.smartrooms): return self.smartrooms[topic]
         else: return None
 
+    def getServer(self):
+        return self.server
+
+    def getSmartRooms(self):
+        return self.smartrooms
+
     def addSmartRoomClient(self, clientTopic, sr):
         self.smartrooms[clientTopic] = sr
 
@@ -88,7 +95,7 @@ class SmartroomServer(Thread):
         clientTopic = topic
         serverTopic = topic+'-server'
         print("Client requested connection with topic: " + clientTopic) # on file
-        sr = SmartRoomClient()
+        sr = SmartRoomClient(self)
         sr.setMacAddress(clientTopic)
         self.addSmartRoomClient(clientTopic, sr)
         sub = [SUBSCRIBED, clientTopic]
@@ -97,7 +104,7 @@ class SmartroomServer(Thread):
         self.server.publish(clientTopic, json.dumps(GETSTATUS), qos=0, retain=False)
 
     def sanitizeTopic(self, topic):
-        return topic[0:len(topic)-7] 
+        return topic[0:len(topic)-7]
 
     def decodeMessage(self, topic, request):
         sr = self.getSmartRoomClient(self.sanitizeTopic(topic))
@@ -112,7 +119,10 @@ class SmartroomServer(Thread):
             for key, value in data.items():
                 sr.updateSensor(key, value)
             return False
-    
+
+    def sendCommand(self, topic, command):
+        self.server.publish(topic, json.dumps(command), qos = 0, retain = False)
+
     def printSrSensors(self, sr):
         for key, value in sr.getSensorsList().items():
             pprint(key)

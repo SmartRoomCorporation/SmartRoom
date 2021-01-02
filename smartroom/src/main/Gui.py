@@ -34,26 +34,22 @@ class Gui:
         self.camPreview.pack(expand=1,fill=tk.BOTH,padx=5,pady=5)
         frame1=tk.Frame(self.camera_frame)
         frame1.grid(row=0,column=1)
-        s_button = tk.Button(frame1,text="OPEN CAMERA", command=self.ciaone1)
+        s_button = tk.Button(frame1,text="OPEN CAMERA", command=self.openCamera)
         s_button.grid(row=0, column=0,sticky="W")
-        s_button = tk.Button(frame1,text="CLOSE CAMERA", command=self.ciaone2)
-        s_button.grid(row=1, column=0,sticky="W")     
-        s_button = tk.Button(frame1,text="SET FULLSCREEN", command=self.ciaone)
-        s_button.grid(row=2, column=0,sticky="W")                 
+        s_button = tk.Button(frame1,text="CLOSE CAMERA", command=self.closeCamera)
+        s_button.grid(row=1, column=0,sticky="W")
 
     def callSr(self):
-       # self.text_output = tk.Label(self.window, text=json.dumps(self.sr.getRoomStatus()), fg="green", font=("Helevetica", 16))
-        #self.text_output.grid(row=1, column=1, padx=50, sticky="W")
         for key,value in self.sr.getSensorsList().items():
             value.startMeasure()
             value.actuator()
             value.refreshCurrValueLabel()
-            
+            #self.sr.updateReq(key, value.getSensorStatus())
 
     def refreshMeasure(self):
         self.callSr()
         self.window.after(2500, self.refreshMeasure)
-    
+
     def refreshCamera(self):
         self.showCamera()
         self.sr.getCamera().showFaceRecon()
@@ -64,17 +60,14 @@ class Gui:
         self.camPreview.config(image = photo)
         self.camPreview.image = photo
 
-    def ciaone(self):
-        self.sr.updateReq("Temperature", [30, 40, True, False])
-
-    def ciaone1(self):
+    def openCamera(self):
         self.sr.getCamera().openCamera()
 
-    def ciaone2(self):
+    def closeCamera(self):
         self.sr.getCamera().closeCamera()
 
     def setRoom(self, sr):
         self.sr = sr
-    
+
     def getWindow(self):
         return self.window

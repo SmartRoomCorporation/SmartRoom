@@ -1,7 +1,7 @@
 from .. import SensorModule
 from PIL import Image, ImageTk
 import tkinter as tk
-from .. import ActuatorStatusBar 
+from .. import ActuatorStatusBar
 from .. import StatusCircle
 
 class AirModuleStub(SensorModule.SensorModule):
@@ -23,7 +23,7 @@ class AirModuleStub(SensorModule.SensorModule):
 		self.setThresholdValue(100)
 		self.setActuatorStatus(0)
 
-	def initGui(self, block): 
+	def initGui(self, block):
 		self.initGUI = True
 		super().setSensorName("AirModule")
 		super().createGUIBlock(block)
@@ -66,7 +66,7 @@ class AirModuleStub(SensorModule.SensorModule):
 		self.count = self.count + 1
 		return self.getCurrValue()
 
-	def getCount(self): 
+	def getCount(self):
 		return self.count
 
 	def setCount(self, val):
@@ -95,7 +95,7 @@ class AirModuleStub(SensorModule.SensorModule):
 				if(currentSpeed == self.FANMIDDLE): self.manualCommand(self.FANOFF)
 				elif(currentSpeed == self.FANFULL): self.manualCommand(self.FANMIDDLE)
 			self.refreshCurrValueLabel()
-				
+
 
 	def createTempGui(self,left,right):
 		up=Image.open(self.getResDir()+ "/res/assets/general/up.png")
@@ -134,10 +134,12 @@ class AirModuleStub(SensorModule.SensorModule):
 		auto_button=tk.Button(right,text="ON-OFF",command=lambda:self.onChangeAutopilot())
 		auto_button.grid(row=1,column=11,padx=5)
 
-	def refreshCurrValueLabel(self): 
+	def refreshCurrValueLabel(self):
 		if(not self.initGUI): return False
 		self.curr_output.config(text=self.getCurrValue())
 		self.curr_output.update()
+		self.th_output.config(text=self.getThresholdValue())
+		self.th_output.update()
 		if(self.actuator_status == self.FANOFF):
 			self.act_status.changeStatus(0)
 		if(self.actuator_status == self.FANMIDDLE):
@@ -145,7 +147,7 @@ class AirModuleStub(SensorModule.SensorModule):
 		if(self.actuator_status == self.FANFULL):
 			self.act_status.changeStatus(2)
 		self.autoPilotStatusLED()
-	
+
 	def onThRise(self):
 		self.rise()
 		self.th_output.config(text=self.getThresholdValue())
@@ -158,9 +160,9 @@ class AirModuleStub(SensorModule.SensorModule):
 
 	def onActuatorRise(self):
 		self.serverCommand(self.FANUP)
-	
 
-	def onActuatorReduce(self):	
+
+	def onActuatorReduce(self):
 		self.serverCommand(self.FANDOWN)
 
 	def onChangeAutopilot(self):
@@ -169,9 +171,9 @@ class AirModuleStub(SensorModule.SensorModule):
 		else:
 			self.setAutoPilot(True)
 		self.auto_output.change()
-	
-	def autoPilotStatusLED(self): 
-		if(self.getAutoPilot()): 
-			self.auto_output.change(True) 
-		else: 
+
+	def autoPilotStatusLED(self):
+		if(self.getAutoPilot()):
+			self.auto_output.change(True)
+		else:
 			self.auto_output.change(False)

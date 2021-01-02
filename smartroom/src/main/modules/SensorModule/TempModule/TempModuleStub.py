@@ -1,7 +1,7 @@
 from .. import SensorModule
 from PIL import Image, ImageTk
 import tkinter as tk
-from .. import ActuatorStatusBar 
+from .. import ActuatorStatusBar
 from .. import StatusCircle
 
 
@@ -61,12 +61,12 @@ class TempModuleStub(SensorModule.SensorModule):
         if(self.count > 70):
             self.count = 0
         self.count = self.count + 1
-        return self.getCurrValue() 
-        
-    def getCount(self): 
-        return self.count 
-    
-    def setCount(self, val): 
+        return self.getCurrValue()
+
+    def getCount(self):
+        return self.count
+
+    def setCount(self, val):
         self.count = val
 
     def rise(self):
@@ -126,41 +126,43 @@ class TempModuleStub(SensorModule.SensorModule):
         self.auto_output.grid(row=1,column=10,padx=5,pady=10)
         auto_button=tk.Button(right,text="ON-OFF",command=lambda:self.onChangeAutopilot())
         auto_button.grid(row=1,column=11,padx=5)
-        
+
     def refreshCurrValueLabel(self):
         if(not self.initGUI): return False
         self.curr_output.config(text=self.getCurrValue())
         self.curr_output.update()
+        self.th_output.config(text=self.getThresholdValue())
+        self.th_output.update()
         if(self.getActuatorStatus()):
             self.act_status.change(True)
         else:
             self.act_status.change(False)
         self.autoPilotStatusLED()
 
-    def onThRise(self): 
-        self.rise() 
-        self.th_output.config(text=self.getThresholdValue()) 
-        self.th_output.update()
-    
-    def onThReduce(self): 
-        self.reduce() 
+    def onThRise(self):
+        self.rise()
         self.th_output.config(text=self.getThresholdValue())
         self.th_output.update()
-        
-    def onActuatorRise(self): 
+
+    def onThReduce(self):
+        self.reduce()
+        self.th_output.config(text=self.getThresholdValue())
+        self.th_output.update()
+
+    def onActuatorRise(self):
         self.serverCommand(self.ON)
-        
-    def onActuatorReduce(self): 
+
+    def onActuatorReduce(self):
         self.serverCommand(self.OFF)
-        
-    def onChangeAutopilot(self): 
-        if(self.getAutoPilot()): 
-            self.setAutoPilot(False) 
+
+    def onChangeAutopilot(self):
+        if(self.getAutoPilot()):
+            self.setAutoPilot(False)
             self.auto_output.change(False)
-        else: 
-            self.setAutoPilot(True) 
+        else:
+            self.setAutoPilot(True)
             self.auto_output.change(True)
-    
+
     def autoPilotStatusLED(self):
         if(self.getAutoPilot()):
             self.auto_output.change(True)

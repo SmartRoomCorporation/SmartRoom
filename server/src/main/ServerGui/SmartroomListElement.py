@@ -1,29 +1,25 @@
 from tkinter import *   # from x import * is bad practice
-from StatusCircle import StatusCircle
+from ServerGui.StatusCircle import StatusCircle
 from PIL import Image, ImageTk
 
 
-class SmartroomListElement(Frame):
+class SmartroomListElement(LabelFrame):
     sc = ""
     smartroom = ""
+    set_icon = ""
+    set_img = Image.open("ServerGui/setting.png")
+    set_img = set_img.resize((20, 20))
 
-    def __init__(self, parent, origin, smartroom, *args, **kw):
+    def __init__(self, parent, origin, key, *args, **kw):
         super().__init__(master = parent,  *args, **kw)
         self.parent = parent
         self.origin = origin
-        self.smartroom = smartroom
+        self.smartroom = key
 
-        set_img = Image.open("setting.png")
-        set_img = set_img.resize((20, 20))
-        self.set_icon = ImageTk.PhotoImage(set_img)
+        self.set_icon = ImageTk.PhotoImage(self.set_img)
 
         smart_frame = Frame(self, bg = self["bg"])
         smart_frame.grid(row = 0, column = 0, padx = 5, pady = 5, sticky = W)
-
-        label1 = Label(smart_frame, text="Room:", bg = self["bg"])
-        label1.pack(side = LEFT, padx = 5, pady = 5)
-        label = Label(smart_frame, text = smartroom, bg = self["bg"])
-        label.pack(padx = 5, pady = 5)
 
         conn_frame = Frame(self, bg = self["bg"])
         conn_frame.grid(row = 0, column = 1, padx = 5, pady = 5)
@@ -40,4 +36,4 @@ class SmartroomListElement(Frame):
         self.sc.change();
 
     def showSmartRoom(self):
-        self.origin.roomCard()
+        self.origin.roomCard(self.smartroom)

@@ -9,7 +9,7 @@ class StatusCircle(Canvas):
     def __init__(self, parent, *args, **kw):
         Canvas.__init__(self, parent, *args, **kw)
         self.circle = self.createCircle(20, 20, 5)
-        self.itemconfig(self.circle, fill = 'red')
+        self.itemconfig(self.circle, fill = 'lime')
 
     def change(self):
         if self.status is True:

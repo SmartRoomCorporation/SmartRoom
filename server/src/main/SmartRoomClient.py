@@ -10,9 +10,26 @@ class SmartRoomClient:
     TEMPERATURE = "Temperature"
     AIR = "Air"
     LIGHT = "Light"
+    server_instance = ""
+    active = False
+
+    def __init__(self, server):
+        self.server_instance = server
+
+    def getServerInstance(self):
+        return self.server_instance
+
+    def setActive(self, val):
+        self.active = val
+
+    def getActive(self):
+        return self.active
 
     def setMacAddress(self, macaddr):
         self.macaddress = macaddr
+
+    def getMacAddress(self):
+        return self.macaddress
 
     def updateSensors(self, sensors):
         self.sensors = sensors
@@ -23,12 +40,12 @@ class SmartRoomClient:
 
     def addSensor(self, sensor, data):
         s = None
-        if(sensor == self.TEMPERATURE): 
-            s = TempSensor()
-        elif(sensor == self.AIR): 
-            s = AirSensor()
-        elif(sensor == self.LIGHT): 
-            s = LightSensor()
+        if(sensor == self.TEMPERATURE):
+            s = TempSensor(self)
+        elif(sensor == self.AIR):
+            s = AirSensor(self)
+        elif(sensor == self.LIGHT):
+            s = LightSensor(self)
         else: return False # TODO RAISE EXCEPTION
         s.setCurrentValue(data[0])
         s.setThresholdValue(data[1])
@@ -42,6 +59,7 @@ class SmartRoomClient:
             self.sensors[sensor].setThresholdValue(data[1])
             self.sensors[sensor].setActuator(data[2])
             self.sensors[sensor].setAutoPilot(data[3])
+            self.sensors[sensor].updateGui()
         else: return False # TODO RAISE EXCEPTION
 
     def isConnected(self):
