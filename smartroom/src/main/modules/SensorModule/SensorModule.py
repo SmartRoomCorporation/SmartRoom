@@ -41,7 +41,7 @@ class SensorModule:
 		return 0
 
 	def getSensorStatus(self): 
-		return [self.getCurrValue(), self.getThresholdValue(), self.getActuatorStatus(), self.getAutopilot()]
+		return [self.getCurrValue(), self.getThresholdValue(), self.getActuatorStatus(), self.getAutoPilot()]
 
 	def getReqNumber(self): 
 		return self.req_number

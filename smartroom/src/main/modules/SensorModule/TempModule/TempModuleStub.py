@@ -15,12 +15,14 @@ class TempModuleStub(SensorModule.SensorModule):
     LOWERBOUND = -50
     ON = "ON"
     OFF = "OFF"
+    initGUI = False
 
     def __init__(self):
         self.setActuatorStatus(False)
         self.setThresholdValue(25)
 
     def initGui(self, block):
+        self.initGUI = True
         super().setSensorName("TemperatureSensor")
         super().createGUIBlock(block)
         self.leftGuiSide = self.left_side
@@ -126,6 +128,7 @@ class TempModuleStub(SensorModule.SensorModule):
         auto_button.grid(row=1,column=11,padx=5)
         
     def refreshCurrValueLabel(self):
+        if(not self.initGUI): return False
         self.curr_output.config(text=self.getCurrValue())
         self.curr_output.update()
         if(self.getActuatorStatus()):

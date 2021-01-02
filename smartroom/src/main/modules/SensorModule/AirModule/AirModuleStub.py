@@ -17,12 +17,14 @@ class AirModuleStub(SensorModule.SensorModule):
 	FANDOWN = "FANDOWN"
 	leftGuiSide = ""
 	rightGuiSide = ""
+	initGUI = False
 
 	def __init__(self):
 		self.setThresholdValue(100)
 		self.setActuatorStatus(0)
 
-	def initGui(self, block):
+	def initGui(self, block): 
+		self.initGUI = True
 		super().setSensorName("AirModule")
 		super().createGUIBlock(block)
 		self.leftGuiSide = self.left_side
@@ -132,7 +134,8 @@ class AirModuleStub(SensorModule.SensorModule):
 		auto_button=tk.Button(right,text="ON-OFF",command=lambda:self.onChangeAutopilot())
 		auto_button.grid(row=1,column=11,padx=5)
 
-	def refreshCurrValueLabel(self):
+	def refreshCurrValueLabel(self): 
+		if(not self.initGUI): return False
 		self.curr_output.config(text=self.getCurrValue())
 		self.curr_output.update()
 		if(self.actuator_status == self.FANOFF):
