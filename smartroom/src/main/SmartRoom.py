@@ -20,7 +20,7 @@ ACTUATOR = "ACTUATOR"
 class SmartRoom(Thread):
     sensors = dict()
     client = mqtt.Client()
-    ip = None
+    ip = "127.0.0.1"
     port = 1883
     camera = None
     ttl = 60
@@ -93,6 +93,9 @@ class SmartRoom(Thread):
     def pubToServ(self):
         return self.getRoomStatus()
 
+    def sendMessage(self, message):
+        self.client.publish(serverTopic, message, qos=0, retain=False)
+
     def run(self):
         self.initClient()
 
@@ -108,7 +111,7 @@ class SmartRoom(Thread):
             data = request.pop()
             request = request[0]
         except:
-            return False # TODO raise exception uknown request
+            return False
         if(request == COMMAND):
             sensor = self.getSensor(data[0])
             command = data[1]
@@ -116,5 +119,5 @@ class SmartRoom(Thread):
             if(command == REDUCE): sensor.reduce()
             if(command == AUTOON): sensor.setAutoPilot(True)
             if(command == AUTOOFF): sensor.setAutoPilot(False)
-            if(command == ACTUATOR): sensor.serverCommand(data[2:len(data)-1])
+            if(command == ACTUATOR): sensor.serverCommand(data[2])
             self.updateReq(data[0], sensor.getSensorStatus())
