@@ -63,17 +63,18 @@ class TestTempModule(unittest.TestCase):
         self.assertEqual(19, self.tms.getThresholdValue())
 
     def testServerCommand(self): # testSERVERCOMMAND
+        self.tms.setAutoPilot(False)
         self.tms.setActuatorStatus(True)
         self.tms.serverCommand("OFF")
         self.assertEqual(False, self.tms.getActuatorStatus())
-        self.assertEqual(False, self.tms.getAutopilot())
+        self.assertEqual(False, self.tms.getAutoPilot())
         self.tms.setThresholdValue(25)
         self.tms.setCurrValue(23)
         self.tms.setReqNumber(12)
         self.tms.setAutoPilot(False)
         self.tms.setActuatorStatus(False)
         self.tms.serverCommand("ON")
-        self.assertEqual(True, self.tms.getAutopilot())
+        self.assertEqual(True, self.tms.getAutoPilot())
         self.tms.actuator()
         self.assertEqual(True, self.tms.getActuatorStatus())
 

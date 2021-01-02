@@ -23,8 +23,8 @@ class LightModuleStub(SensorModule.SensorModule):
 		self.setActuatorStatus(0)
 		self.setThresholdValue(5000)
 
-	def initGui(self, block):
-    		self.initGUI = True
+	def initGui(self, block): 
+		self.initGUI = True
 		super().setSensorName("LightSensor")
 		super().createGUIBlock(block)
 		self.leftGuiSide = self.left_side

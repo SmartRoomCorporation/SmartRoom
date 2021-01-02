@@ -72,6 +72,7 @@ class TestAirModule(unittest.TestCase):
         self.assertEqual(500, self.tms.getThresholdValue())
 
     def testServerCommand(self): # testSERVERCOMMAND
+        self.tms.setAutoPilot(False)
         self.tms.setActuatorStatus(100)
         self.tms.serverCommand("LIGHTUP")
         self.assertEqual(100, self.tms.getActuatorStatus())
