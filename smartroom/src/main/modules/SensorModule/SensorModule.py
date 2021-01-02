@@ -7,8 +7,9 @@ class SensorModule:
 	right_side = ""
 	threshold_value = 0
 	actuator_status = 0
-	req_number = 0
+	req_number = 10
 	autopilot = True
+	sensorname=""
 
 	def getResDir(self): 
 		current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))) 
@@ -26,14 +27,18 @@ class SensorModule:
 		return 0
 
 	def createGUIBlock(self, block):
-		frame1 = tk.Frame(block)
-		frame2 = tk.Frame(block)
-		frame1.configure(highlightbackground="black", highlightcolor="black", highlightthickness=1, width=350, height=200, bd= 0,bg="grey")
-		frame2.configure(highlightbackground="black", highlightcolor="black", highlightthickness=0.5, width=550, height=200, bg="white")
+		label=tk.Label(text=self.sensorname,fg="Green",font=("Helevetica",16))
+		mainframe=tk.LabelFrame(block,labelwidget=label)
+		mainframe.pack(fill=tk.X)
+		frame1 = tk.Frame(mainframe)
+		frame2 = tk.Frame(mainframe)
 		frame1.grid(row=0, column=0)
 		frame2.grid(row=0, column=1)
 		self.left_side=frame1
 		self.right_side=frame2
+	
+	def initGui(self,block):
+		return 0
 
 	def getSensorStatus(self): 
 		return [self.getCurrValue(), self.getThresholdValue(), self.getActuatorStatus(), self.getAutopilot()]
@@ -59,8 +64,17 @@ class SensorModule:
 	def setAutoPilot(self, val): 
 		self.autopilot = val
 
-	def getAutopilot(self): 
+	def getAutoPilot(self): 
 		return self.autopilot
+	
+	def getSensorName(self):
+		return self.sensorname
+	
+	def setSensorName(self,val):
+		self.sensorname=val
+
+	def refreshCurrValueLabel(self):
+		return 0
 
 	def manualCommand(self): 
 		return 0
