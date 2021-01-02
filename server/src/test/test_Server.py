@@ -16,7 +16,7 @@ class TestServer(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.server = SmartroomServer()
-        cls.sr = SmartRoomClient()
+        cls.sr = SmartRoomClient(cls.server)
         clientTopic = "STUBTOPIC"
         cls.sr.setMacAddress(clientTopic)
         cls.server.addSmartRoomClient(clientTopic, cls.sr)

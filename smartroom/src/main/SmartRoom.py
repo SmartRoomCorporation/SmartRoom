@@ -17,6 +17,7 @@ AUTOON = "AUTOON"
 AUTOOFF = "AUTOOFF"
 ACTUATOR = "ACTUATOR"
 SUBSCRIBED = "SUBSCRIBED"
+SENSORSSTATUS = "SENSORSSTATUS"
 
 class SmartRoom(Thread):
     sensors = dict()
@@ -97,6 +98,12 @@ class SmartRoom(Thread):
     def sendMessage(self, message):
         self.client.publish(serverTopic, message, qos=0, retain=False)
 
+    def sendSensorsStatus(self):
+        data = dict()
+        for key, value in self.sensors.items():
+            data[key] = value.getSensorStatus()
+        self.client.publish(serverTopic, json.dumps((UPDATESENSOR, data)), qos=0, retain=False)
+
     def run(self):
         self.initClient()
 
@@ -107,6 +114,9 @@ class SmartRoom(Thread):
     def decodeMessage(self, request):
         if(request == GETSTATUS):
             self.client.publish(serverTopic, json.dumps((SENSORSLIST, self.getRoomStatus())), qos=0, retain=False)
+            return False
+        if(request == SENSORSSTATUS):
+            self.sendSensorsStatus()
             return False
         try:
             data = request.pop()
