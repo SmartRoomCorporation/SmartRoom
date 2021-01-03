@@ -10,9 +10,11 @@ class TempModuleStub(SensorModule.SensorModule):
     count = 0
     leftGuiSide = ""
     rightGuiSide = ""
-    MAXREQNUMBER = 2
+    MAXREQNUMBER = 12
     UPPERBOUND = 80
     LOWERBOUND = -50
+    UPPERBOUNDTHRESHOLD = 30
+    LOWERBOUNDTHRESHOLD = 18
     ON = "ON"
     OFF = "OFF"
     initGUI = False
@@ -20,6 +22,7 @@ class TempModuleStub(SensorModule.SensorModule):
     def __init__(self):
         self.setActuatorStatus(False)
         self.setThresholdValue(25)
+        self.setActuatorStatus(False)
 
     def initGui(self, block):
         self.initGUI = True
@@ -72,13 +75,13 @@ class TempModuleStub(SensorModule.SensorModule):
     def rise(self):
         currentTh = self.getThresholdValue()
         newTh = currentTh + 1
-        if(newTh >= 30): self.setThresholdValue(30)
+        if(newTh >= self.UPPERBOUNDTHRESHOLD): self.setThresholdValue(self.UPPERBOUNDTHRESHOLD)
         else: self.setThresholdValue(newTh)
 
     def reduce(self):
         currentTh = self.getThresholdValue()
         newTh = currentTh - 1
-        if(newTh <= 18): self.setThresholdValue(18)
+        if(newTh <= self.LOWERBOUNDTHRESHOLD): self.setThresholdValue(self.LOWERBOUNDTHRESHOLD)
         else: self.setThresholdValue(newTh)
 
     def serverCommand(self, data):
