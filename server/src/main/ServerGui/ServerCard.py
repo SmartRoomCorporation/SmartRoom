@@ -26,12 +26,13 @@ class ServerCard(tk.Frame):
         self.frame.pack(expand=1, fill = BOTH)
 
     def refreshSmartrooms(self):
-        for key, smartroom in self.smartrooms.items():
-            if key not in self.smartroomframes:
-                label = tk.Label(text = key, fg = "blue")
-                smart_frame = SmartroomListElement(self.frame.interior, self, smartroom,labelwidget = label, bg = self["bg"], relief = "sunken", bd=1)
-                smart_frame.pack(padx = 2, pady = 2, fill = X)
-                self.smartroomframes[key] = smart_frame
+        if not self.showroom:
+            for key, smartroom in self.smartrooms.items():
+                if key not in self.smartroomframes:
+                    label = tk.Label(text = key, fg = "blue")
+                    smart_frame = SmartroomListElement(self.frame.interior, self, smartroom,labelwidget = label, bg = self["bg"], relief = "sunken", bd=1)
+                    smart_frame.pack(padx = 2, pady = 2, fill = X)
+                    self.smartroomframes[key] = smart_frame
 
 
     def roomCard(self, smartroom):
