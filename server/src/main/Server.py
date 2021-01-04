@@ -108,9 +108,12 @@ class SmartroomServer(Thread):
 
     def decodeMessage(self, topic, request):
         sr = self.getSmartRoomClient(self.sanitizeTopic(topic))
-        if(sr is None): return False # TODO raise Exception
+        if(sr is None): 
+            print("Invalid Command")
+            return False 
         data = request.pop()
         request = request[0]
+        print(str(self.sanitizeTopic(topic)) + " " + request + " " + str(data))
         if(request == SENSORSLIST):
             for key, value in data.items():
                 sr.addSensor(key, value)
