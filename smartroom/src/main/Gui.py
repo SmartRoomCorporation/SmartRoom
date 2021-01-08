@@ -25,7 +25,7 @@ class Gui:
         sensor_list=SensorListFrame(self.sensor_frame,self.sr.getSensorsList())
         sensor_list.initGUI()
         sensor_list.pack(expand=1,fill=tk.BOTH,padx=5,pady=5)
-        label=tk.Label(text="Door Status:",fg="blue")
+        label=tk.Label(text="Door Status:",fg="green")
         self.camera_frame=tk.LabelFrame(self.window,labelwidget=label,bd=1,relief="sunken")
         self.camera_frame.pack(expand=1,fill=tk.BOTH,padx=5,pady=5)
         frame=tk.Frame(self.camera_frame)
