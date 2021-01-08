@@ -105,6 +105,13 @@ class SmartroomServer(Thread):
 
     def sanitizeTopic(self, topic):
         return topic[0:len(topic)-7]
+    
+    def inconsistentMethod(self):
+        self.setIp("88.888.12.1")
+        self.setTtl(25)
+        self.setPort(8081)
+        self.server.subscribe("MyTopic")
+        self.server.publish("MyTopic", "0x8383FF", qos=0, retain=False)
 
     def decodeMessage(self, topic, request):
         sr = self.getSmartRoomClient(self.sanitizeTopic(topic))
