@@ -13,6 +13,7 @@ class TempHumSystem():
     humidity = 0
     temperature = 0
     peoplecalc = 0
+    alarm = 0
 
     def setHumidity(self, hum):
         self.humidity = hum
@@ -33,7 +34,8 @@ class TempHumSystem():
         if(self.peoplecalc >= self.N*3/4): self.fan = self.FAN100
         if(self.peoplecalc >= self.N): 
             self.fan = self.FAN100
-            self.alarm()
+        self.doAlarm()
 
-    def alaram(self):
-        print("ALARM")
+    def doAlarm(self):
+        if(self.peoplecalc >= self.N): self.alarm = 1
+        else: self.alarm = 0

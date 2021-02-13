@@ -7,6 +7,7 @@ class RoomSimulation():
     humidity = 19.8
     morning = 719
     people = 0
+    max_people = 6
     # range 0 - 719 GIORNO
     # range 720 - 1339 NOTTE
 
@@ -335,7 +336,7 @@ class RoomSimulation():
             self.genHumidity() 
 
     def addPerson(self):
-        self.people += 1
+        if(self.people < self.max_people): self.people += 1
     
     def removePerson(self):
         if(self.people > 0): self.people -= 1

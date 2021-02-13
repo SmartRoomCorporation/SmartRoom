@@ -1,5 +1,5 @@
-from RoomSimulation import RoomSimulation
-from TempHumSystem import TempHumSystem
+from .RoomSimulation import RoomSimulation
+from .TempHumSystem import TempHumSystem
 
 class RoomConditioning():
     tempmod = 0     # modificata dalla presenza delle persone

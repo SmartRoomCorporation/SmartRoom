@@ -5,13 +5,13 @@ r = RoomConditioning()
 # start simulation
 r.room.addPerson()
 for i in range(180):
-    r.tempmodGen()
-    r.tempcondGen()
-    r.computeTempcalc()
-    r.hummodGen()
-    r.humcondGen()
-    r.computeHumcalc()
-    r.activateReading()
+    r.tempmodGen() #temp
+    r.tempcondGen() #tempcond
+    r.computeTempcalc() #tempcalc
+    r.hummodGen() #hum
+    r.humcondGen() #humcond
+    r.computeHumcalc() #humcalc
+    r.activateReading() #people
     print(r.room.people)
     print(r.activateReading())
     print(r.sys.fan)

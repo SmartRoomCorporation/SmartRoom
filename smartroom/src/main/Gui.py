@@ -5,6 +5,7 @@ from SensorListFrame import SensorListFrame
 class Gui:
     window = tk.Tk()
     window.geometry()
+    window.minsize(550, 550)
     window.title("SmartRoom")
     sr = ""
     text_output = ""
