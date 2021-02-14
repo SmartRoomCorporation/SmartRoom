@@ -105,7 +105,8 @@ class SmartRoom(Thread):
         self.client.publish(serverTopic, json.dumps((UPDATESENSOR, data)), qos=0, retain=False)
 
     def run(self):
-        self.initClient()
+        return True
+        #self.initClient()
 
     def stopClient(self):
         self.client.loop_stop()
