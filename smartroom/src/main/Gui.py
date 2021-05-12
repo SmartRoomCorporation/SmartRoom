@@ -17,7 +17,7 @@ class Gui:
     def run(self):
         self.initGui()
         self.refreshMeasure()
-        #self.refreshCamera()
+        self.refreshCamera()
         self.window.mainloop()
 
     def initGui(self):
@@ -28,28 +28,28 @@ class Gui:
         sensor_list.pack(expand=1,fill=tk.BOTH,padx=5,pady=5)
         label=tk.Label(text="Door Status:",fg="green")
         self.camera_frame=tk.LabelFrame(self.window,labelwidget=label,bd=1,relief="sunken")
-        #self.camera_frame.pack(expand=1,fill=tk.BOTH,padx=5,pady=5)
+        self.camera_frame.pack(expand=1,fill=tk.BOTH,padx=5,pady=5)
         frame=tk.Frame(self.camera_frame)
-        #frame.grid(sticky="W",row=0,column=0)
+        frame.grid(sticky="W",row=0,column=0)
         self.camPreview = tk.Label(frame, image = None, width=440, height=300)
-        #self.camPreview.pack(expand=1,fill=tk.BOTH,padx=5,pady=5)
+        self.camPreview.pack(expand=1,fill=tk.BOTH,padx=5,pady=5)
         frame1=tk.Frame(self.camera_frame)
-        #frame1.grid(row=0,column=1)
+        frame1.grid(row=0,column=1)
         s_button = tk.Button(frame1,text="OPEN CAMERA", command=self.openCamera)
-        #s_button.grid(row=0, column=0,sticky="W")
+        s_button.grid(row=0, column=0,sticky="W")
         s_button = tk.Button(frame1,text="CLOSE CAMERA", command=self.closeCamera)
-        #s_button.grid(row=1, column=0,sticky="W")
+        s_button.grid(row=1, column=0,sticky="W")
 
     def callSr(self):
         for key,value in self.sr.getSensorsList().items():
             value.startMeasure()
             value.actuator()
             value.refreshCurrValueLabel()
-            #self.sr.updateReq(key, value.getSensorStatus())
+            self.sr.updateReq(key, value.getSensorStatus())
 
     def refreshMeasure(self):
         self.callSr()
-        self.window.after(1000, self.refreshMeasure)
+        self.window.after(2500, self.refreshMeasure)
 
     def refreshCamera(self):
         self.showCamera()
