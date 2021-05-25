@@ -82,6 +82,7 @@ class SmartroomServer(Thread):
 
     def on_log(self, client, userdata, level, buf):
             print(buf)
+            #return True
 
     def on_message(self, client, userdata, msg): # on message callback
         if(str(msg.topic) == "subreqq"):

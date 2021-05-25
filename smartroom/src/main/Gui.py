@@ -45,7 +45,7 @@ class Gui:
             value.startMeasure()
             value.actuator()
             value.refreshCurrValueLabel()
-            self.sr.updateReq(key, value.getSensorStatus())
+            #self.sr.updateReq(key, value.getSensorStatus())
 
     def refreshMeasure(self):
         self.callSr()
