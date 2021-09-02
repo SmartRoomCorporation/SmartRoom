@@ -2,11 +2,19 @@ import paho.mqtt.client as mqtt
 from uuid import getnode as get_mac
 import json
 from threading import Thread
+from modules.SensorModule.TempModule.TempModuleStub import TempModuleStub
+from modules.SensorModule.LightModule.LightModuleStub import LightModuleStub
+from modules.SensorModule.AirModule.AirModuleStub import AirModuleStub
 import logging
 
+logging.basicConfig(filename='log.log')
 log = logging.getLogger("MQTT_LOG_DEBUG")
 topic = ':'.join(("%012X" % get_mac())[i:i+2] for i in range(0, 12, 2))
 serverTopic = ':'.join(("%012X" % get_mac())[i:i+2] for i in range(0, 12, 2))+'-server' # output from client
+LIGHTMODULE = "LIGHTMODULE"
+TEMPMODULE = "TEMPMODULE"
+AIRMODULE = "AIRMODULE"
+HUMMODULE = "HUMMODULE"
 GETSTATUS = "GETSTATUS"
 SENSORSLIST = "SENSORSLIST"
 UPDATESENSOR = "UPDATESENSOR"
@@ -20,6 +28,7 @@ SUBSCRIBED = "SUBSCRIBED"
 SENSORSSTATUS = "SENSORSSTATUS"
 SENSORSTATUS = "SENSORSTATUS"
 SENSORSUB = "SENSORSUB"
+CONFIRMSUB = "CONFIRMSUB"
 
 class SmartRoom(Thread):
     sensors = dict()
@@ -45,6 +54,23 @@ class SmartRoom(Thread):
     def getCamera(self):
         return self.camera
 
+    def createSensor(self, sensor):
+        if(sensor['type'] == LIGHTMODULE):
+            lm = LightModuleStub()
+            lm.setType(sensor['type'])
+            lm.setName(sensor['name'])
+            self.addSensor("Light", lm)
+        elif(sensor['type'] == AIRMODULE):
+            am = AirModuleStub()
+            am.setType(sensor['type'])
+            am.setName(sensor['name'])
+            self.addSensor("Air", am)
+        elif(sensor['type'] == TEMPMODULE):
+            tm = TempModuleStub()
+            tm.setType(sensor['type'])
+            tm.setName(sensor['name'])
+            self.addSensor("Temperature", tm)
+
     def addSensor(self, sensor, sensorobj):
         self.sensors[sensor] = sensorobj
 
@@ -64,14 +90,22 @@ class SmartRoom(Thread):
             self.client.on_log = self.on_log
             self.client.connect_async(self.ip, self.port, self.ttl)
             self.client.loop_start()
-
-    #file di dati con id dei sensori
-    #tutti si sottoscrivono allo stesso topic
-    #quando smartroom riceve richiesta controlla
-    #se il sensore e' presente nella sua lista
+    
+    def checkSensorFromList(self, sensor):
+        f = open("sensorlist.txt", "r")
+        lines = f.readlines()
+        for line in lines:
+            if(line.strip() == sensor): return True
+        return False
 
     def subscribeSingleSensor(self, sensor):
         self.client.subscribe(sensor + "-PUB")
+
+    def trySub(self, sensor):
+        if(self.checkSensorFromList(sensor)): 
+            client.subscribe(self.subscribeSingleSensor(sensor))
+            return True
+        return False
 
     def getRoomStatus(self):
         currStatus = dict()
@@ -92,6 +126,12 @@ class SmartRoom(Thread):
     def on_message(self, client, userdata, msg): # on message callback
         if(msg.topic == topic):
             self.decodeMessage(json.loads(str(msg.payload.decode("utf-8"))))
+        if(msg.topic == SENSORSUB):
+            sens = json.loads(str(msg.payload.decode("utf-8")))
+            if(self.trySub(sens)):
+                client.publish(sens + "-SUB", json.dumps((CONFIRMSUB, "OK")), qos=0, retain=False)
+        if(msg.topic == SENSORSSTATUS):
+            print("creare sensori")
 
     def updateReq(self, sensor, data):
         data = {sensor : data}

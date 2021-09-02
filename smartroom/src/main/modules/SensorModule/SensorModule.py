@@ -9,7 +9,8 @@ class SensorModule:
 	actuator_status = 0
 	req_number = 10
 	autopilot = True
-	sensorname=""
+	sensorname = ""
+	sensortype = ""
 	connectionStatus = False
 
 	def getResDir(self): 
@@ -91,3 +92,19 @@ class SensorModule:
 
 	def serverCommand(self): 
 		return 0
+	
+	def switchConnectionStatus(self):
+		if(self.connectionStatus): self.connectionStatus = False
+		else: self.connectionStatus = True
+
+	def setType(self, st):
+		self.sensortype = st
+	
+	def getType(self):
+		return self.sensortype
+	
+	def setName(self, name):
+		self.sensorname = name
+
+	def getName(self):
+		return self.sensorname
