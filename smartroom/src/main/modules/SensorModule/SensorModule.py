@@ -1,7 +1,8 @@
 import tkinter as tk 
 import os,sys,inspect
+from threading import Thread
 
-class SensorModule:
+class SensorModule(Thread):
 	curr_value = 0
 	left_side = ""
 	right_side = ""
@@ -11,6 +12,7 @@ class SensorModule:
 	autopilot = True
 	sensorname = ""
 	sensortype = ""
+	macAddr = ""
 	connectionStatus = False
 
 	def getResDir(self): 
@@ -108,3 +110,9 @@ class SensorModule:
 
 	def getName(self):
 		return self.sensorname
+
+	def setMac(self, mac):
+		self.macAddr = mac
+	
+	def getMac(self):
+		return self.macAddr
