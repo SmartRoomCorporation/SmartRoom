@@ -1,0 +1,7 @@
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: Expecting value: line 1 column 1 (char 0)
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: Expecting value: line 1 column 1 (char 0)
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: name 'client' is not defined
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: name 'client' is not defined
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: No topic specified, or incorrect topic type.
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: No topic specified, or incorrect topic type.
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: No topic specified, or incorrect topic type.

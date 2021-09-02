@@ -1,7 +1,8 @@
 import tkinter as tk 
 import os,sys,inspect
+from threading import Thread
 
-class SensorModule:
+class SensorModule(Thread):
 	curr_value = 0
 	left_side = ""
 	right_side = ""
@@ -9,7 +10,9 @@ class SensorModule:
 	actuator_status = 0
 	req_number = 10
 	autopilot = True
-	sensorname=""
+	sensorname = ""
+	sensortype = ""
+	macAddr = ""
 	connectionStatus = False
 
 	def getResDir(self): 
@@ -91,3 +94,25 @@ class SensorModule:
 
 	def serverCommand(self): 
 		return 0
+	
+	def switchConnectionStatus(self):
+		if(self.connectionStatus): self.connectionStatus = False
+		else: self.connectionStatus = True
+
+	def setType(self, st):
+		self.sensortype = st
+	
+	def getType(self):
+		return self.sensortype
+	
+	def setName(self, name):
+		self.sensorname = name
+
+	def getName(self):
+		return self.sensorname
+
+	def setMac(self, mac):
+		self.macAddr = mac
+	
+	def getMac(self):
+		return self.macAddr
