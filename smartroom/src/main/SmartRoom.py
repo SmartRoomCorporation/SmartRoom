@@ -18,6 +18,8 @@ AUTOOFF = "AUTOOFF"
 ACTUATOR = "ACTUATOR"
 SUBSCRIBED = "SUBSCRIBED"
 SENSORSSTATUS = "SENSORSSTATUS"
+SENSORSTATUS = "SENSORSTATUS"
+SENSORSUB = "SENSORSUB"
 
 class SmartRoom(Thread):
     sensors = dict()
@@ -60,8 +62,16 @@ class SmartRoom(Thread):
             self.client.on_publish = self.on_publish
             self.client.enable_logger(logger=log)
             self.client.on_log = self.on_log
-            self.client.connect(self.ip, self.port, self.ttl)
+            self.client.connect_async(self.ip, self.port, self.ttl)
             self.client.loop_start()
+
+    #file di dati con id dei sensori
+    #tutti si sottoscrivono allo stesso topic
+    #quando smartroom riceve richiesta controlla
+    #se il sensore e' presente nella sua lista
+
+    def subscribeSingleSensor(self, sensor):
+        self.client.subscribe(sensor + "-PUB")
 
     def getRoomStatus(self):
         currStatus = dict()
@@ -76,6 +86,7 @@ class SmartRoom(Thread):
 
     def on_connect(self, client, userdata, flags, rc): # on connect callback
         client.subscribe(str(topic))
+        client.subscribe(str(SENSORSUB))
         client.publish("subreqq", topic, qos=0, retain=False)
 
     def on_message(self, client, userdata, msg): # on message callback
@@ -104,6 +115,10 @@ class SmartRoom(Thread):
             data[key] = value.getSensorStatus()
         self.client.publish(serverTopic, json.dumps((UPDATESENSOR, data)), qos=0, retain=False)
 
+    def requestSensorStatus(self, sensor):
+        topic = sensor.getTopic();
+        self.client.publish(topic + "-SUB", GETSTATUS, qos=0, retain=False)
+
     def run(self):
         self.initClient()
 
@@ -117,6 +132,9 @@ class SmartRoom(Thread):
             return False
         if(request == SENSORSSTATUS):
             self.sendSensorsStatus()
+            return False
+        if(request == SENSORSTATUS):
+            print("SENSORSTATUS")
             return False
         try:
             data = request.pop()

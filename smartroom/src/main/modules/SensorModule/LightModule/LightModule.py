@@ -35,7 +35,6 @@ class LightModule(SensorModule.SensorModule):
 		self.setActuatorStatus(val)
 
 	def actuator(self):
-        # SEND COMMAND
 		if(self.getCurrValue() <= self.LOWERBOUND or self.getCurrValue() >= self.UPPERBOUND):
     			self.setActuatorStatus(None)
 			return False

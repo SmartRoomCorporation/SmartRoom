@@ -53,7 +53,7 @@ class SmartroomServer(Thread):
             self.server.on_publish = self.on_publish
             self.server.enable_logger(logger=log)
             self.server.on_log = self.on_log
-            self.server.connect(self.ip, self.port, self.ttl)
+            self.server.connect_async(self.ip, self.port, self.ttl)
             self.server.loop_start()
 
     def run(self):
