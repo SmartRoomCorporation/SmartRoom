@@ -2,8 +2,8 @@ import paho.mqtt.client as mqtt
 from uuid import getnode as get_mac
 import json
 from threading import Thread
-from modules.SensorModule.TempModule.TempModuleStub import TempModuleStub
-from modules.SensorModule.LightModule.LightModuleStub import LightModuleStub
+from modules.SensorModule.TempModule.TempHumModule import TempHumModule
+from modules.SensorModule.LightModule.LightModule import LightModule
 from modules.SensorModule.AirModule.AirModuleStub import AirModuleStub
 import logging
 
@@ -13,7 +13,7 @@ topic = ':'.join(("%012X" % get_mac())[i:i+2] for i in range(0, 12, 2))
 serverTopic = ':'.join(("%012X" % get_mac())[i:i+2] for i in range(0, 12, 2))+'-server' # output from client
 DATAMSG = "DATAMSG"
 LIGHTMODULE = "LIGHTMODULE"
-TEMPMODULE = "TEMPMODULE"
+TEMPHUMMODULE = "TEMPHUMMODULE"
 AIRMODULE = "AIRMODULE"
 HUMMODULE = "HUMMODULE"
 GETSTATUS = "GETSTATUS"
@@ -59,7 +59,7 @@ class SmartRoom(Thread):
 
     def createSensor(self, sensor):
         if(sensor['type'] == LIGHTMODULE):
-            lm = LightModuleStub()
+            lm = LightModule()
             lm.setType(sensor['type'])
             lm.setName(sensor['name'])
             lm.setMac(sensor['mac'])
@@ -74,8 +74,8 @@ class SmartRoom(Thread):
             am.switchConnectionStatus()
             self.addSensor("Air", am)
             self.client.publish(sensor['mac'] + "-SUB", json.dumps((CONFIRMREG)), qos=0, retain=False)
-        elif(sensor['type'] == TEMPMODULE):
-            tm = TempModuleStub()
+        elif(sensor['type'] == TEMPHUMMODULE):
+            tm = TempHumModule()
             tm.setType(sensor['type'])
             tm.setName(sensor['name'])
             tm.setMac(sensor['mac'])
@@ -186,7 +186,17 @@ class SmartRoom(Thread):
         if(payload["msgType"] == "SENSORREG"):
             self.createSensor(payload)
         if(payload["msgType"] == "DATAMSG"):
-            print(payload)
+            self.decodeMeasure(payload)
+
+    def decodeMeasure(self, payload):
+        if(payload["type"] == LIGHTMODULE):
+            for key, value in self.sensors.items():
+                if(value.getType() == LIGHTMODULE and value.getMac() == payload["mac"]):
+                    value.readMeasures(payload["data"])
+        elif(payload["type"] == TEMPHUMMODULE):
+            for key, value in self.sensors.items():
+                if(value.getType() == TEMPHUMMODULE and value.getMac() == payload["mac"]):
+                    value.readMeasures(payload["data"])
 
     def decodeMessage(self, request):
         if(request == GETSTATUS):

@@ -1,8 +1,7 @@
 import tkinter as tk 
 import os,sys,inspect
-from threading import Thread
 
-class SensorModule(Thread):
+class SensorModule():
 	curr_value = 0
 	left_side = ""
 	right_side = ""
@@ -116,3 +115,6 @@ class SensorModule(Thread):
 	
 	def getMac(self):
 		return self.macAddr
+
+	def readMeasures(self, payload):
+		return False
