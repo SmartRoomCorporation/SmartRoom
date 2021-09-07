@@ -5,3 +5,14 @@ ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: name 'client' is not define
 ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: No topic specified, or incorrect topic type.
 ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: No topic specified, or incorrect topic type.
 ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: No topic specified, or incorrect topic type.
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: 'bool' object is not callable
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: initGui() missing 1 required positional argument: 'block'
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: 'NoneType' object has no attribute 'initSensor'
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: name 'checkIsRegistered' is not defined
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: name 'COMMAND' is not defined
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: 'NoneType' object has no attribute 'sendDirectCommand'
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: string indices must be integers
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: Expecting value: line 1 column 1 (char 0)
+ERROR:MQTT_LOG_DEBUG:failed to receive on socket: [WinError 10053] Connessione interrotta dal software del computer host
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: 'data'
+ERROR:MQTT_LOG_DEBUG:Caught exception in on_message: 'data'

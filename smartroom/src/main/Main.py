@@ -10,15 +10,22 @@ import time
 sr = SmartRoom()
 camera = Camera()
 camera.initCamera()
-gui = Gui()
-tm = TempModuleStub()
-lm = LightModuleStub()
-am = AirModuleStub()
 sr.setCamera(camera)
-#sr.addSensor("Temperature", tm)
-#sr.addSensor("Light", lm)
-#sr.addSensor("Air", am)
-sr.setIp("80.182.90.112")
+gui = Gui()
+
+sr.setGui(gui)
+
+sr.setIp("79.12.248.28")
 sr.start()
 gui.setRoom(sr)
 gui.run()
+
+#tm = TempModuleStub()
+#lm = LightModuleStub()
+#am = AirModuleStub()
+
+#sr.addSensor("Temperature", tm)
+#sr.addSensor("Light", lm)
+#sr.addSensor("Air", am)
+
+

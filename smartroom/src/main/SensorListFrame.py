@@ -22,5 +22,6 @@ class SensorListFrame(tk.Frame):
             #frame1.pack(fill=tk.X,padx=5,pady=5)
             value.initGui(self.frame.interior)
 
+    def addSensor(self, sensor):
+        sensor.initGui(self.frame.interior)
       
-        

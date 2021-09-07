@@ -5,14 +5,16 @@ from .. import ActuatorStatusBar
 from .. import StatusCircle
 
 class LightModule(SensorModule.SensorModule):
-    #This module implements the temperature control function
+    # This module implements the temperature control function
+	# setlight : 0 - 40000
 	count = 0
 	MAXREQNUMBER = 2
 	DIMMEROFF = 0
-	DIMMERMIDDLE = 50
-	DIMMERFULL = 100
+	DIMMERMIDDLE = 20000
+	DIMMERFULL = 40000
 	LOWERBOUND = -1
-	UPPERBOUND = 10001
+	UPPERBOUND = 40001
+	COMMAND = "COMMAND"
 	LIGHTUP = "LIGHTUP"
 	LIGHTDOWN = "LIGHTDOWN"
 	leftGuiSide = ""
@@ -20,23 +22,19 @@ class LightModule(SensorModule.SensorModule):
 	initGUI = False
 
 	def __init__(self):
-		self.setActuatorStatus(0)
-		self.setThresholdValue(5000)
+		#self.setActuatorStatus(0)
+		self.setThresholdValue(20000)
 
 	def initGui(self, block):
 		self.initGUI = True
-		super().setSensorName("LightSensor")
 		super().createGUIBlock(block)
 		self.leftGuiSide = self.left_side
 		self.rightGuiSide = self.right_side
 		self.createTempGui(self.leftGuiSide, self.rightGuiSide)
-
-	def manualCommand(self, val):
-		self.setActuatorStatus(val)
-
+        
 	def actuator(self):
 		if(self.getCurrValue() <= self.LOWERBOUND or self.getCurrValue() >= self.UPPERBOUND):
-    			self.setActuatorStatus(None)
+			self.setActuatorStatus(None)
 			return False
 		if(self.getAutoPilot()):
 			if(self.getReqNumber() < self.MAXREQNUMBER): self.setReqNumber(self.getReqNumber() + 1)
@@ -47,6 +45,9 @@ class LightModule(SensorModule.SensorModule):
 				if(curr > (threshold + int(threshold/2))): self.setActuatorStatus(self.DIMMEROFF)
 				elif(curr > threshold and curr < (threshold + int(threshold/2))): self.setActuatorStatus(self.DIMMERMIDDLE)
 				elif(curr < threshold): self.setActuatorStatus(self.DIMMERFULL)
+
+	def manualCommand(self, val):
+		self.setActuatorStatus(val)
 
 	def startMeasure(self):
 		return self.getCurrValue()
@@ -80,7 +81,6 @@ class LightModule(SensorModule.SensorModule):
 				if(currentLight == self.DIMMERMIDDLE): self.manualCommand(self.DIMMEROFF)
 				elif(currentLight == self.DIMMERFULL): self.manualCommand(self.DIMMERMIDDLE)
 			self.refreshCurrValueLabel()
-
 
 	def createTempGui(self,left,right):
 		up=Image.open(self.getResDir()+ "/res/assets/general/up.png")
@@ -146,7 +146,6 @@ class LightModule(SensorModule.SensorModule):
 	def onActuatorRise(self):
 		self.serverCommand(self.LIGHTUP)
 
-
 	def onActuatorReduce(self):
 		self.serverCommand(self.LIGHTDOWN)
 
@@ -162,3 +161,15 @@ class LightModule(SensorModule.SensorModule):
 			self.auto_output.change(True)
 		else:
 			self.auto_output.change(False)
+
+	def setActuatorStatus(self, status): 
+		wrapper = dict()
+		comm = dict()
+		wrapper["msgType"] = "COMMAND"
+		comm["setlight"] = status
+		wrapper["command"] = comm
+		self.getSmartroom().sendDirectCommand(self.getMac(), wrapper)
+		self.actuator_status = status
+
+	def readMeasures(self, payload): 
+		print(payload)

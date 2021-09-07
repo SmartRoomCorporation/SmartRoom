@@ -41,6 +41,10 @@ class SmartRoom(Thread):
     camera = None
     ttl = 60
     configFile = "smartroom.conf"
+    gui = None
+
+    def setGui(self, realGui):
+        self.gui = realGui
 
     def setPort(self, port):
         self.port = port
@@ -57,15 +61,24 @@ class SmartRoom(Thread):
     def getCamera(self):
         return self.camera
 
+    def checkIsRegistered(self, sensor):
+        for key, value in self.sensors.items():
+            if(value.getMac() == sensor): return True
+        return False
+
     def createSensor(self, sensor):
+        if(self.checkIsRegistered(sensor['mac'])): return False
         if(sensor['type'] == LIGHTMODULE):
             lm = LightModule()
             lm.setType(sensor['type'])
             lm.setName(sensor['name'])
             lm.setMac(sensor['mac'])
+            lm.setSmartroom(self)
             lm.switchConnectionStatus()
             self.addSensor("Light", lm)
             self.client.publish(sensor['mac'] + "-SUB", json.dumps((CONFIRMREG)), qos=0, retain=False)
+            lm.setActuatorStatus(0)
+            self.gui.initSensor(lm)
         elif(sensor['type'] == AIRMODULE):
             am = AirModuleStub()
             am.setType(sensor['type'])
@@ -79,9 +92,12 @@ class SmartRoom(Thread):
             tm.setType(sensor['type'])
             tm.setName(sensor['name'])
             tm.setMac(sensor['mac'])
+            tm.setSmartroom(self)
             tm.switchConnectionStatus()
             self.addSensor("Temperature", tm)
             self.client.publish(sensor['mac'] + "-SUB", json.dumps((CONFIRMREG)), qos=0, retain=False)
+            tm.setActuatorStatus(0)
+            self.gui.initSensor(tm)
 
     def addSensor(self, sensor, sensorobj):
         self.sensors[sensor] = sensorobj
@@ -118,6 +134,7 @@ class SmartRoom(Thread):
         self.client.subscribe(sensor + "-PUB")
 
     def trySub(self, sensor):
+        if(self.checkIsRegistered(sensor)): return False
         if(self.checkSensorFromList(sensor)): 
             self.subscribeSingleSensor(sensor)
             return True
@@ -172,7 +189,7 @@ class SmartRoom(Thread):
         self.client.publish(serverTopic, json.dumps((UPDATESENSOR, data)), qos=0, retain=False)
 
     def requestSensorStatus(self, sensor):
-        topic = sensor.getTopic();
+        topic = sensor.getMac();
         self.client.publish(topic + "-SUB", GETSTATUS, qos=0, retain=False)
 
     def run(self):
@@ -186,6 +203,7 @@ class SmartRoom(Thread):
         if(payload["msgType"] == "SENSORREG"):
             self.createSensor(payload)
         if(payload["msgType"] == "DATAMSG"):
+            print(payload)
             self.decodeMeasure(payload)
 
     def decodeMeasure(self, payload):
@@ -220,3 +238,7 @@ class SmartRoom(Thread):
             if(command == AUTOOFF): sensor.setAutoPilot(False)
             if(command == ACTUATOR): sensor.serverCommand(data[2])
             self.updateReq(data[0], sensor.getSensorStatus())
+    
+    def sendDirectCommand(self, topic, command):
+        print(json.dumps(command))
+        self.client.publish(topic + "-SUB", json.dumps(command), qos=0, retain=False)

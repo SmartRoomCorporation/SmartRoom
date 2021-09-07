@@ -5,7 +5,7 @@ from SensorListFrame import SensorListFrame
 class Gui:
     window = tk.Tk()
     window.geometry()
-    window.minsize(550, 550)
+    window.minsize(800, 600)
     window.title("SmartRoom")
     sr = ""
     text_output = ""
@@ -13,6 +13,7 @@ class Gui:
     sensor_frame=""
     camera_frame=""
     camPreview=""
+    sensor_list = None
 
     def run(self):
         self.initGui()
@@ -20,12 +21,16 @@ class Gui:
         self.refreshCamera()
         self.window.mainloop()
 
+    def initSensor(self, sensor):
+        self.sensor_list.addSensor(sensor)
+        self.sensor_list.pack(expand=1,fill=tk.BOTH,padx=5,pady=5)
+
     def initGui(self):
         self.sensor_frame=tk.Frame(self.window)
         self.sensor_frame.pack(expand=1,fill=tk.BOTH)
-        sensor_list=SensorListFrame(self.sensor_frame,self.sr.getSensorsList())
-        sensor_list.initGUI()
-        sensor_list.pack(expand=1,fill=tk.BOTH,padx=5,pady=5)
+        self.sensor_list=SensorListFrame(self.sensor_frame,self.sr.getSensorsList())
+        self.sensor_list.initGUI()
+        self.sensor_list.pack(expand=1,fill=tk.BOTH,padx=5,pady=5)
         label=tk.Label(text="Door Status:",fg="green")
         self.camera_frame=tk.LabelFrame(self.window,labelwidget=label,bd=1,relief="sunken")
         self.camera_frame.pack(expand=1,fill=tk.BOTH,padx=5,pady=5)
