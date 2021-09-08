@@ -172,4 +172,4 @@ class LightModule(SensorModule.SensorModule):
 		self.actuator_status = status
 
 	def readMeasures(self, payload): 
-		print(payload)
+		self.setCurrValue(int(payload["light"]))

@@ -3,6 +3,7 @@ from PIL import Image, ImageTk
 import tkinter as tk
 from .. import ActuatorStatusBar
 from .. import StatusCircle
+import random
 
 
 class TempHumModule(SensorModule.SensorModule):
@@ -18,15 +19,15 @@ class TempHumModule(SensorModule.SensorModule):
     ON = "ON"
     OFF = "OFF"
     initGUI = False
+    temperature = 0
+    humidity = 0
 
     def __init__(self):
-        self.setActuatorStatus(False)
         self.setThresholdValue(25)
-        self.setActuatorStatus(False)
+        #self.setActuatorStatus(False)
 
     def initGui(self, block):
         self.initGUI = True
-        super().setSensorName("TemperatureSensor")
         super().createGUIBlock(block)
         self.leftGuiSide = self.left_side
         self.rightGuiSide = self.right_side
@@ -37,17 +38,24 @@ class TempHumModule(SensorModule.SensorModule):
         if(not val): self.setActuatorStatus(val)
 
     def actuator(self):
-        if(self.getCurrValue() < self.LOWERBOUND or self.getCurrValue() > self.UPPERBOUND):
+        if(self.getCurrTemperature() < self.LOWERBOUND or self.getCurrTemperature() > self.UPPERBOUND):
             return self.setActuatorStatus(None)
         if(self.getAutoPilot()):
             if(self.getReqNumber() < self.MAXREQNUMBER): self.setReqNumber(self.getReqNumber() + 1)
             else:
                 self.setReqNumber(0)
-                if(self.getCurrValue() > self.getThresholdValue()): self.setActuatorStatus(False)
+                if(self.getCurrTemperature() > self.getThresholdValue()): self.setActuatorStatus(False)
                 else: self.setActuatorStatus(True)
 
     def startMeasure(self):
-        return self.getCurrValue()
+        self.temperature = random.randint(0, 9)
+        self.humidity = random.randint(0, 9)
+        val = [self.getCurrTemperature(), self.getCurrHumidity()]
+        return val
+
+    def getCurrValue(self):
+        val = [self.getCurrTemperature(), self.getCurrHumidity()]
+        return val
 
     def getCount(self):
         return self.count
@@ -86,8 +94,12 @@ class TempHumModule(SensorModule.SensorModule):
         #STATUS FRAME
         label=tk.Label(left,text="Temperature:",fg="Black",font=("Helevetica",13))
         label.grid(row=2,column=1,padx=5,sticky="W")
-        self.curr_output=tk.Label(left,text=self.getCurrValue(),fg="Black",font=("Helevetica",13),bg="white",bd=1,relief="sunken")
-        self.curr_output.grid(row=2,column=2,padx=5,sticky="W")
+        self.curr_outputT=tk.Label(left,text=self.getCurrTemperature(),fg="Black",font=("Helevetica",13),bg="white",bd=1,relief="sunken")
+        self.curr_outputT.grid(row=2,column=2,padx=5,sticky="W")
+        label=tk.Label(left,text="Humidity:",fg="Black",font=("Helevetica",13))
+        label.grid(row=3,column=1,padx=5,sticky="W")
+        self.curr_outputH=tk.Label(left,text=self.getCurrHumidity(),fg="Black",font=("Helevetica",13),bg="white",bd=1,relief="sunken")
+        self.curr_outputH.grid(row=3,column=2,padx=5,sticky="W")
 		#CONTROL FRAME
         label=tk.Label(right,text="Threshold:",fg="Black",font=("Helevetica",13))
         label.grid(row=1,column=1,padx=5,pady=10,sticky="W")
@@ -115,8 +127,10 @@ class TempHumModule(SensorModule.SensorModule):
 
     def refreshCurrValueLabel(self):
         if(not self.initGUI): return False
-        self.curr_output.config(text=self.getCurrValue())
-        self.curr_output.update()
+        self.curr_outputT.config(text=self.getCurrTemperature())
+        self.curr_outputT.update()
+        self.curr_outputH.config(text=self.getCurrHumidity())
+        self.curr_outputH.update()
         self.th_output.config(text=self.getThresholdValue())
         self.th_output.update()
         if(self.getActuatorStatus()):
@@ -154,3 +168,28 @@ class TempHumModule(SensorModule.SensorModule):
             self.auto_output.change(True)
         else:
             self.auto_output.change(False)
+    
+    def setCurrTemperature(self, val):
+        self.temperature = val
+
+    def setCurrHumidity(self, val):
+        self.humidity = val
+
+    def getCurrTemperature(self):
+        return self.temperature
+
+    def getCurrHumidity(self):
+        return self.humidity
+
+    def setActuatorStatus(self, status):
+        wrapper = dict() 
+        comm = dict() 
+        wrapper["msgType"] = "COMMAND" 
+        comm["setwh"] = status 
+        wrapper["command"] = comm 
+        self.getSmartroom().sendDirectCommand(self.getMac(), wrapper) 
+        self.actuator_status = status
+
+    def readMeasures(self, payload): 
+        self.setCurrTemperature(int(payload["temperature"])) 
+        self.setCurrHumidity(int(payload["humidity"]))

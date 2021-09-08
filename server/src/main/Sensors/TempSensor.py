@@ -19,6 +19,8 @@ class TempSensor:
     SENSOR = "Temperature"
     REQON = "ON"
     REQOFF = "OFF"
+    humidity = 0
+    temperature = 0
 
     def __init__(self, smartroom):
         self.smartroom = smartroom
@@ -33,7 +35,8 @@ class TempSensor:
         self.actuator = val
 
     def setCurrentValue(self, val):
-        self.current_val = val
+        self.temperature = val[0]
+        self.humidity = val[1]
 
     def getAutopilot(self):
         return self.autopilot
@@ -69,8 +72,12 @@ class TempSensor:
         #STATUS FRAME
         label=tk.Label(left,text="Temperature:",fg="Black",font=("Helevetica",13))
         label.grid(row=2,column=1,padx=5,sticky="W")
-        self.curr_output=tk.Label(left,text=self.getCurrentValue(),fg="Black",font=("Helevetica",13),bg="white",bd=1,relief="sunken")
-        self.curr_output.grid(row=2,column=2,padx=5,sticky="W")
+        self.curr_outputT=tk.Label(left,text=self.getCurrTemperature(),fg="Black",font=("Helevetica",13),bg="white",bd=1,relief="sunken")
+        self.curr_outputT.grid(row=2,column=2,padx=5,sticky="W")
+        label=tk.Label(left,text="Humidity:",fg="Black",font=("Helevetica",13))
+        label.grid(row=3,column=1,padx=5,sticky="W")
+        self.curr_outputH=tk.Label(left,text=self.getCurrHumidity(),fg="Black",font=("Helevetica",13),bg="white",bd=1,relief="sunken")
+        self.curr_outputH.grid(row=3,column=2,padx=5,sticky="W")
 		#CONTROL FRAME
         label=tk.Label(right,text="Threshold:",fg="Black",font=("Helevetica",13))
         label.grid(row=1,column=1,padx=5,pady=10,sticky="W")
@@ -98,7 +105,8 @@ class TempSensor:
 
     def updateGui(self):
         if self.gui:
-            self.curr_output.config(text = self.getCurrentValue())
+            self.curr_outputT.config(text = self.getCurrTemperature())
+            self.curr_outputH.config(text = self.getCurrHumidity())
             self.th_output.config(text = self.getThresholdValue())
             if self.getActuator() == self.ON:
                 self.act_status.change(True)
@@ -106,6 +114,12 @@ class TempSensor:
                 self.act_status.change(False)
 
             self.auto_output.change(self.getAutopilot())
+
+    def getCurrHumidity(self):
+        return self.humidity
+
+    def getCurrTemperature(self):
+        return self.temperature
 
     def reqChangeAutoPilot(self):
         status = ""

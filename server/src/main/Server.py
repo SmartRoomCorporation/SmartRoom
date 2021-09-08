@@ -27,6 +27,7 @@ class SmartroomServer(Thread):
     port = 1883
     ttl = 60
     server = mqtt.Client()
+    logFile = None
 
     def setPort(self, port):
         self.port = port
@@ -54,6 +55,7 @@ class SmartroomServer(Thread):
             self.server.enable_logger(logger=log)
             self.server.on_log = self.on_log
             self.server.connect_async(self.ip, self.port, self.ttl)
+            self.initLogFile()
             self.server.loop_start()
 
     def run(self):
@@ -81,8 +83,8 @@ class SmartroomServer(Thread):
         client.subscribe("subreqq")
 
     def on_log(self, client, userdata, level, buf):
-            print(buf)
-            #return True
+        self.logMe(buf)
+        #return True
 
     def on_message(self, client, userdata, msg): # on message callback
         if(str(msg.topic) == "subreqq"):
@@ -114,7 +116,7 @@ class SmartroomServer(Thread):
             return False 
         data = request.pop()
         request = request[0]
-        print(str(self.sanitizeTopic(topic)) + " " + request + " " + str(data))
+        #print(str(self.sanitizeTopic(topic)) + " " + request + " " + str(data))
         if(request == SENSORSLIST):
             for key, value in data.items():
                 sr.addSensor(key, value)
@@ -134,3 +136,13 @@ class SmartroomServer(Thread):
             pprint(value.getThresholdValue())
             pprint(value.getActuator())
             pprint(value.getAutopilot())
+
+    def logMe(self, msg):
+        self.logFile = open("log.log", "a")
+        self.logFile.write(msg)
+        self.logFile.close()
+
+    def initLogFile(self):
+        self.logFile = open("log.log", "w")
+        self.logFile.write("")
+        self.logFile.close()
