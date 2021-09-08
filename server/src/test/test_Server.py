@@ -26,11 +26,11 @@ class TestServer(unittest.TestCase):
         cls.server = None
 
     def testSensorsListRequest(self):
-        d = ["SENSORSLIST", {'Temperature': [15, 25, False, True], 'Light': [1500, 5000, 0, True], 'Air': [80, 100, 0, True]}]
+        d = ["SENSORSLIST", {'Temperature': [[15, 20], 25, False, True], 'Light': [1500, 5000, 0, True], 'Air': [80, 100, 0, True]}]
         self.server.decodeMessage("STUBTOPIC-server", d)
         sr = self.server.getSmartRoomClient("STUBTOPIC")
         sensor = sr.getSensor("Temperature")
-        self.assertEqual(15, sensor.getCurrentValue())
+        self.assertEqual(15, sensor.getCurrTemperature())
         self.assertEqual(25, sensor.getThresholdValue())
         self.assertEqual(False, sensor.getActuator())
         self.assertEqual(True, sensor.getAutopilot())
@@ -46,7 +46,7 @@ class TestServer(unittest.TestCase):
         self.assertEqual(True, sensor.getAutopilot())
 
     def testUpdateSensorRequest(self):
-        d = ["SENSORSLIST", {'Temperature': [15, 25, False, True], 'Light': [1500, 5000, 0, True], 'Air': [80, 100, 0, True]}]
+        d = ["SENSORSLIST", {'Temperature': [[15, 20], 25, False, True], 'Light': [1500, 5000, 0, True], 'Air': [80, 100, 0, True]}]
         self.server.decodeMessage("STUBTOPIC-server", d)
         sr = self.server.getSmartRoomClient("STUBTOPIC")
         sensor = sr.getSensor("Air")
