@@ -13,16 +13,6 @@ camera.initCamera()
 sr.setCamera(camera)
 gui = Gui()
 
-tm = TempHumModule()
-tm.setType("TEMPHUMMODULE")
-tm.setName("TEMPHUMSTUB")
-tm.setMac("TEMPHUMMAC")
-tm.setSmartroom(sr)
-tm.switchConnectionStatus()
-sr.addSensor("Temperature", tm)
-
-tm.setActuatorStatus("OFF")
-
 sr.setGui(gui)
 
 
@@ -32,6 +22,5 @@ sr.start()
 gui.setRoom(sr)
 gui.run()
 
-sr.gui.initSensor(tm)
 
 
