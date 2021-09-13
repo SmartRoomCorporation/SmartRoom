@@ -137,6 +137,9 @@ class SmartroomServer(Thread):
             pprint(value.getActuator())
             pprint(value.getAutopilot())
 
+    def retriveSensorList(self, sr):
+        self.server.publish(sr.getMacAddress(), json.dumps(GETSTATUS), qos=0, retain=False)
+
     def logMe(self, msg):
         self.logFile = open("log.log", "a")
         self.logFile.write(msg)

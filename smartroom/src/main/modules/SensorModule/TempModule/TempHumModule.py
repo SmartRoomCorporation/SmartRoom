@@ -39,7 +39,7 @@ class TempHumModule(SensorModule.SensorModule):
 
     def actuator(self):
         if(self.getCurrTemperature() < self.LOWERBOUND or self.getCurrTemperature() > self.UPPERBOUND):
-            return self.setActuatorStatus(None)
+            return self.setActuatorStatus(False)
         if(self.getAutoPilot()):
             if(self.getReqNumber() < self.MAXREQNUMBER): self.setReqNumber(self.getReqNumber() + 1)
             else:

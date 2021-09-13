@@ -189,7 +189,7 @@ class SmartRoom(Thread):
         return True
 
     def on_log(self, client, userdata, level, buf):
-        self.logMe(buf)
+        self.logMe(buf + "\n")
 
     def pubToServ(self):
         return self.getRoomStatus()

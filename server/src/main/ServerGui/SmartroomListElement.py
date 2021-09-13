@@ -36,4 +36,5 @@ class SmartroomListElement(LabelFrame):
         self.sc.change();
 
     def showSmartRoom(self):
+        self.origin.window.server.retriveSensorList(self.smartroom)
         self.origin.roomCard(self.smartroom)
