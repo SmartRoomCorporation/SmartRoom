@@ -34,12 +34,4 @@ gui.run()
 
 sr.gui.initSensor(tm)
 
-#tm = TempModuleStub()
-#lm = LightModuleStub()
-#am = AirModuleStub()
-
-#sr.addSensor("Temperature", tm)
-#sr.addSensor("Light", lm)
-#sr.addSensor("Air", am)
-
 

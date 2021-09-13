@@ -48,8 +48,6 @@ class TempHumModule(SensorModule.SensorModule):
                 else: self.setActuatorStatus(True)
 
     def startMeasure(self):
-        self.temperature = random.randint(0, 9)
-        self.humidity = random.randint(0, 9)
         val = [self.getCurrTemperature(), self.getCurrHumidity()]
         return val
 
