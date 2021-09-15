@@ -216,9 +216,10 @@ class SmartRoom(Thread):
 
     def decodeSensorMessage(self, payload):
         if(payload["msgType"] == "SENSORREG"):
+            #print(payload)
             self.createSensor(payload)
         if(payload["msgType"] == "DATAMSG"):
-            print(payload)
+            #print(payload)
             self.decodeMeasure(payload)
 
     def decodeMeasure(self, payload):
@@ -232,7 +233,9 @@ class SmartRoom(Thread):
                     value.readMeasures(payload["data"])
 
     def decodeMessage(self, request):
+        #print(request)
         if(request == GETSTATUS):
+            #print(json.dumps((SENSORSLIST, self.getRoomStatus())))
             self.client.publish(serverTopic, json.dumps((SENSORSLIST, self.getRoomStatus())), qos=0, retain=False)
             return False
         if(request == SENSORSSTATUS):
@@ -255,6 +258,7 @@ class SmartRoom(Thread):
             self.updateReq(data[0], sensor.getSensorStatus())
     
     def sendDirectCommand(self, topic, command):
+        #print(json.dumps(command))
         self.client.publish(topic + "-SUB", json.dumps(command), qos=0, retain=False)
 
     def logMe(self, msg):
